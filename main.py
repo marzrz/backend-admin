@@ -118,12 +118,46 @@ def get_initialtest(id_user):
 @app.route('/users/<id_user>/game/<id_game>', methods=['GET'])
 def get_game(id_user, id_game):
 
-    response = {
-        'user': id_user,
-        'game': id_game
-    }
+    user = json_util.loads(func_get_user(id_user))
+    game1_1 = user['game1_part1']
+    game1_2 = user['game1_part2']
+    game2 = user['game2']
+    game3_1 = user['game3_part1']
+    game3_2 = user['game3_part2']
+    game4 = user['game4']
+
+    if id_game == 1:
+        response = {
+            'questions_1': game1_1['questions'],
+            'points_1': game1_1['totalPoints'],
+            'questions_2': game1_2['questions'],
+            'points_2': game1_2['totalPoints']
+        }
+    elif id_game == 2:
+        response = {
+            'questions': game2['questions'],
+            'points': game2['totalPoints']
+        }
+    elif id_game == 3:
+        response = {
+            'questions_1': game3_1['questions'],
+            'points_1': game3_1['totalPoints'],
+            'questions_2': game3_2['questions'],
+            'points_2': game3_2['totalPoints']
+        }
+    elif id_game == 4:
+        response = {
+            'questions': game4['questions'],
+            'points': game4['totalPoints']
+        }
+    else:
+        response = {
+            'status': 'Error'
+        }
 
     return jsonify(response)
+    
+
 #     user = json_util.loads(func_get_user(id_user))
 #     questions_1 = user['game1_part1']
 #     game1_part2 = user['game1_part2']
