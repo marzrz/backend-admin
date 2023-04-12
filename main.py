@@ -212,9 +212,15 @@ def get_pretests(id_user):
 @app.route('/pretests/<id_test>', methods=['GET'])
 def get_pretest(id_test):
     pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(id_test)})
-    pretest = json_util.dumps(pretest_document)
+    pretest = json_util.loads(json_util.dumps(pretest_document))
 
-    return pretest
+    response = {
+        'id': str(pretest['_id']),
+        'questions': pretest['questions'],
+        'points': pretest['totalPoints']
+    }
+
+    return jsonify(response)
 
 
 # CONVERSATION
