@@ -115,11 +115,12 @@ def get_initialtest(id_user):
     return initialtest
 
 
-@app.route('/users/<id_user>/game1', methods=['GET'])
-def get_game1(id_user):
+@app.route('/users/<id_user>/game/<id_game>', methods=['GET'])
+def get_game(id_user, id_game):
 
     response = {
-        'id': id_user
+        'user': id_user,
+        'game': id_game
     }
 
     return jsonify(response)
