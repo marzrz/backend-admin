@@ -132,7 +132,7 @@ def get_game(id_user, id_game):
     game4_completed = user['game4_complete']
 
     if id_game == "1":
-        if not game1_completed:
+        if game1_completed:
             response = {
                 'questions_1': game1_1['questions'],
                 'points_1': game1_1['totalPoints'],
@@ -144,7 +144,7 @@ def get_game(id_user, id_game):
                 'status': 'Game 1 not completed'
             }
     elif id_game == "2":
-        if not game2_completed:
+        if game2_completed:
             response = {
                 'questions': game2['questions'],
                 'points': game2['totalPoints']
@@ -154,7 +154,7 @@ def get_game(id_user, id_game):
                 'status': 'Game 2 not completed'
             }
     elif id_game == "3":
-        if not game3_completed:
+        if game3_completed:
             response = {
                 'questions_1': game3_1['questions'],
                 'points_1': game3_1['totalPoints'],
@@ -166,7 +166,7 @@ def get_game(id_user, id_game):
                 'status': 'Game 3 not completed'
             }
     elif id_game == "4":
-        if not game4_completed:
+        if game4_completed:
             response = {
                 'questions': game4['questions'],
                 'points': game4['totalPoints']
