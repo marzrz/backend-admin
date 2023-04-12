@@ -115,20 +115,20 @@ def get_initialtest(id_user):
     return initialtest
 
 
-@app.route('/users/<id_user>/game1part1', methods=['GET'])
-def get_game1part1(id_user):
+@app.route('/users/<id_user>/game1', methods=['GET'])
+def get_game1(id_user):
     user = json_util.loads(func_get_user(id_user))
-    game1part1 = user['game1_part1']
+    game1_part1 = user['game1_part1']
+    game1_part2 = user['game1_part2']
 
-    return game1part1
+    response = {
+        'questions_1': game1_part1['questions'],
+        'points_1': game1_part1['totalPoints'],
+        'questions_2': game1_part2['questions'],
+        'points_2': game1_part2['totalPoints']
+    }
 
-
-@app.route('/users/<id_user>/game1part2', methods=['GET'])
-def get_game1part2(id_user):
-    user = json_util.loads(func_get_user(id_user))
-    game1part2 = user['game1_part2']
-
-    return game1part2
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/game2', methods=['GET'])
@@ -136,23 +136,28 @@ def get_game2(id_user):
     user = json_util.loads(func_get_user(id_user))
     game2 = user['game2']
 
+    response = {
+        'questions': game2['questions'],
+        'points': game2['totalPoints']
+    }
+
     return game2
 
 
 @app.route('/users/<id_user>/game3part1', methods=['GET'])
 def get_game3part1(id_user):
     user = json_util.loads(func_get_user(id_user))
-    game3part1 = user['game3_part1']
+    game3_part1 = user['game3_part1']
+    game3_part2 = user['game3_part2']
 
-    return game3part1
+    response = {
+        'questions_1': game3_part1['questions'],
+        'points_1': game3_part1['totalPoints'],
+        'questions_2': game3_part2['questions'],
+        'points_2': game3_part2['totalPoints']
+    }
 
-
-@app.route('/users/<id_user>/game3part2', methods=['GET'])
-def get_game3part2(id_user):
-    user = json_util.loads(func_get_user(id_user))
-    game3part2 = user['game3_part2']
-
-    return game3part2
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/game4', methods=['GET'])
@@ -160,7 +165,12 @@ def get_game4(id_user):
     user = json_util.loads(func_get_user(id_user))
     game4 = user['game4']
 
-    return game4
+    response = {
+        'questions': game4['questions'],
+        'points': game4['totalPoints']
+    }
+
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/survey', methods=['GET'])
