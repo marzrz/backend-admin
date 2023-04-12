@@ -21,9 +21,10 @@ def func_get_user(id):
 def get_users():
     user_list = []
     users_documents = mongo.db.user.find()
-    users = json_util.dumps(users_documents)
-    for user in users:
-        user_list.append(user)
+    # users = json_util.dumps(users_documents)
+    for user_document in users_documents:
+        user = json_util.loads(json_util.dumps(user_document))
+        user_list.append(user['_id'])
 
     return user_list
 
