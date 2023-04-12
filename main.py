@@ -202,10 +202,19 @@ def get_pretests(id_user):
         pretest_list.append(str(test))
 
     response = {
-        'conversations': pretest_list
+        'pretests': pretest_list
     }
 
     return jsonify(response)
+
+
+# PRETEST
+@app.route('/pretests/<id_test>', methods=['GET'])
+def get_pretest(id_test):
+    pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(id_test)})
+    pretest = json_util.dumps(pretest_document)
+
+    return pretest
 
 
 # CONVERSATION
