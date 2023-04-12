@@ -73,16 +73,14 @@ def get_points(id_user):
 def get_kidmed(id_user):
     user = json_util.loads(func_get_user(id_user))
     kidmed = user['kidmed']
+    points = user['total_kidmed']
 
-    return kidmed
+    response = {
+        'kidmed': kidmed,
+        'points': points
+    }
 
-
-@app.route('/users/<id_user>/totalkidmed', methods=['GET'])
-def get_totalkidmed(id_user):
-    user = json_util.loads(func_get_user(id_user))
-    totalkidmed = user['total_kidmed']
-
-    return totalkidmed
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/demtest', methods=['GET'])
