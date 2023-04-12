@@ -152,11 +152,13 @@ def get_game(id_user, id_game):
         }
     else:
         response = {
-            'status': 'Error'
+            'status': 'Error',
+            'user': id_user,
+            'game': id_game
         }
 
     return jsonify(response)
-    
+
 
 #     user = json_util.loads(func_get_user(id_user))
 #     questions_1 = user['game1_part1']
