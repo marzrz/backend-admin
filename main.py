@@ -62,7 +62,11 @@ def get_points(id_user):
     user = json_util.loads(func_get_user(id_user))
     points = user['points']
 
-    return points
+    response = {
+        'points': points
+    }
+
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/kidmed', methods=['GET'])
