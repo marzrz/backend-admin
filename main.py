@@ -119,8 +119,8 @@ def get_initialtest(id_user):
 def get_game(id_user, id_game):
 
     user = json_util.loads(func_get_user(id_user))
-    game1_1 = user['game1_part1']
-    game1_2 = user['game1_part2']
+    # game1_1 = user['game1_part1']
+    # game1_2 = user['game1_part2']
     game2 = user['game2']
     game3_1 = user['game3_part1']
     game3_2 = user['game3_part2']
@@ -128,10 +128,10 @@ def get_game(id_user, id_game):
 
     if id_game == "1":
         response = {
-            'questions_1': game1_1['questions'],
-            'points_1': game1_1['totalPoints'],
-            'questions_2': game1_2['questions'],
-            'points_2': game1_2['totalPoints']
+            'questions_1': user['game1_part1']['questions'],
+            'points_1': user['game1_part1']['totalPoints'],
+            'questions_2': user['game1_part1']['questions'],
+            'points_2': user['game1_part1']['totalPoints']
         }
     elif id_game == "2":
         response = {
