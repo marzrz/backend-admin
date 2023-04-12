@@ -119,37 +119,62 @@ def get_initialtest(id_user):
 def get_game(id_user, id_game):
 
     user = json_util.loads(func_get_user(id_user))
-    # game1_1 = user['game1_part1']
-    # game1_2 = user['game1_part2']
+    game1_1 = user['game1_part1']
+    game1_2 = user['game1_part2']
     game2 = user['game2']
     game3_1 = user['game3_part1']
     game3_2 = user['game3_part2']
     game4 = user['game4']
 
+    game1_completed = user['game1_part2_complete']
+    game2_completed = user['game2_complete']
+    game3_completed = user['game3_part2_complete']
+    game4_completed = user['game4_complete']
+
     if id_game == "1":
-        response = {
-            'questions_1': user['game1_part1']['questions'],
-            'points_1': user['game1_part1']['totalPoints'],
-            'questions_2': user['game1_part1']['questions'],
-            'points_2': user['game1_part1']['totalPoints']
-        }
+        if not game1_completed:
+            response = {
+                'questions_1': game1_1['questions'],
+                'points_1': game1_1['totalPoints'],
+                'questions_2': game1_2['questions'],
+                'points_2': game1_2['totalPoints']
+            }
+        else:
+            response = {
+                'status': 'Game 1 not completed'
+            }
     elif id_game == "2":
-        response = {
-            'questions': game2['questions'],
-            'points': game2['totalPoints']
-        }
+        if not game2_completed:
+            response = {
+                'questions': game2['questions'],
+                'points': game2['totalPoints']
+            }
+        else:
+            response = {
+                'status': 'Game 2 not completed'
+            }
     elif id_game == "3":
-        response = {
-            'questions_1': game3_1['questions'],
-            'points_1': game3_1['totalPoints'],
-            'questions_2': game3_2['questions'],
-            'points_2': game3_2['totalPoints']
-        }
+        if not game3_completed:
+            response = {
+                'questions_1': game3_1['questions'],
+                'points_1': game3_1['totalPoints'],
+                'questions_2': game3_2['questions'],
+                'points_2': game3_2['totalPoints']
+            }
+        else:
+            response = {
+                'status': 'Game 3 not completed'
+            }
     elif id_game == "4":
-        response = {
-            'questions': game4['questions'],
-            'points': game4['totalPoints']
-        }
+        if not game4_completed:
+            response = {
+                'questions': game4['questions'],
+                'points': game4['totalPoints']
+            }
+        else:
+            response = {
+                'status': 'Game 4 not completed'
+            }
     else:
         response = {
             'status': 'Error',
