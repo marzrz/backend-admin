@@ -238,6 +238,24 @@ def get_conversation(id_conver):
     return jsonify(response)
 
 
+# LOGIN
+@app.route('/login', methods=['POST'])
+def login():
+    user = request.json['username']
+    password = request.json['password']
+
+    if user == 'admin' and password == 'admin':
+        response = {
+            'login': True
+        }
+    else:
+        response = {
+            'login': False
+        }
+
+    return jsonify(response)
+
+
 if __name__ == '__main__':
     import ssl
 
