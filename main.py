@@ -20,11 +20,11 @@ def func_get_user(id):
 @app.route('/users', methods=['GET'])
 def get_users():
     user_list = []
-    users_documents = mongo.db.user.find()
+    user_documents = mongo.db.user.find()
     # users = json_util.dumps(users_documents)
-    for user_document in users_documents:
-        user = json_util.loads(json_util.dumps(user_document))
-        user_list.append(user['_id'])
+    for user_document in user_documents:
+        user = json_util.dumps(user_document)
+        user_list.append(user)
 
     return user_list
 
