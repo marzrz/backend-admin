@@ -119,10 +119,10 @@ def get_initialtest(id_user):
 def get_game(id_user, id_game):
 
     user = json_util.loads(func_get_user(id_user))
-    game1_1 = user['game1_part1']
+    game1_1 = user['game1']
     game1_2 = user['game1_part2']
     game2 = user['game2']
-    game3_1 = user['game3_part1']
+    game3_1 = user['game3']
     game3_2 = user['game3_part2']
     game4 = user['game4']
 
