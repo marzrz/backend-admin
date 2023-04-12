@@ -119,11 +119,10 @@ def get_initialtest(id_user):
 def get_game1(id_user):
     user = json_util.loads(func_get_user(id_user))
     questions_1 = user['game1_part1']
-    print (questions_1)
     # game1_part2 = user['game1_part2']
 
     response = {
-        'questions_1': questions_1,
+        'questions_1': questions_1
         # 'points_1': game1_part1['totalPoints'],
         # 'questions_2': game1_part2['questions'],
         # 'points_2': game1_part2['totalPoints']
