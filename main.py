@@ -185,68 +185,27 @@ def get_game(id_user, id_game):
     return jsonify(response)
 
 
-#     user = json_util.loads(func_get_user(id_user))
-#     questions_1 = user['game1_part1']
-#     game1_part2 = user['game1_part2']
-#
-#     response = {
-#         'questions_1': questions_1
-#         'points_1': game1_part1['totalPoints'],
-#         'questions_2': game1_part2['questions'],
-#         'points_2': game1_part2['totalPoints']
-#     }
-#
-#     return jsonify(response)
-#
-#
-# @app.route('/users/<id_user>/game2', methods=['GET'])
-# def get_game2(id_user):
-#     user = json_util.loads(func_get_user(id_user))
-#     game2 = user['game2']
-#
-#     response = {
-#         'questions': game2['questions'],
-#         'points': game2['totalPoints']
-#     }
-#
-#     return jsonify(response)
-#
-#
-# @app.route('/users/<id_user>/game3part1', methods=['GET'])
-# def get_game3part1(id_user):
-#     user = json_util.loads(func_get_user(id_user))
-#     game3_part1 = user['game3_part1']
-#     game3_part2 = user['game3_part2']
-#
-#     response = {
-#         'questions_1': game3_part1['questions'],
-#         'points_1': game3_part1['totalPoints'],
-#         'questions_2': game3_part2['questions'],
-#         'points_2': game3_part2['totalPoints']
-#     }
-#
-#     return jsonify(response)
-#
-#
-# @app.route('/users/<id_user>/game4', methods=['GET'])
-# def get_game4(id_user):
-#     user = json_util.loads(func_get_user(id_user))
-#     game4 = user['game4']
-#
-#     response = {
-#         'questions': game4['questions'],
-#         'points': game4['totalPoints']
-#     }
-#
-#     return jsonify(response)
-
-
 @app.route('/users/<id_user>/survey', methods=['GET'])
 def get_game1(id_user):
     user = json_util.loads(func_get_user(id_user))
     survey = user['survey']
 
     return survey
+
+
+@app.route('/users/<id_user>/pretests', methods=['GET'])
+def get_pretests(id_user):
+    pretest_list = []
+    user = json_util.loads(func_get_user(id_user))
+    pretests = user['conversations']
+    for test in pretests:
+        pretest_list.append(str(test))
+
+    response = {
+        'conversations': pretest_list
+    }
+
+    return jsonify(response)
 
 
 # CONVERSATION
