@@ -23,10 +23,14 @@ def get_users():
     user_documents = mongo.db.user.find()
     # users = json_util.dumps(users_documents)
     for user_document in user_documents:
-        user = json_util.dumps(user_document)
-        user_list.append(user)
+        user = json_util.loads(json_util.dumps(user_document))
+        user_list.append(user['id'])
 
-    return user_list
+    response = {
+        "users": user_list
+    }
+
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>', methods=['GET'])
