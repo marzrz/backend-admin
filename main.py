@@ -35,8 +35,8 @@ def get_users():
 
 
 @app.route('/users/<id_user>', methods=['GET'])
-def get_user(id):
-    user_document = mongo.db.user.find_one({"_id": ObjectId(id)})
+def get_user(id_user):
+    user_document = mongo.db.user.find_one({"_id": ObjectId(id_user)})
     user = json_util.dumps(user_document)
 
     return user
