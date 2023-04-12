@@ -44,10 +44,17 @@ def get_user(id_user):
 
 @app.route('/users/<id_user>/conversations', methods=['GET'])
 def get_conversations(id_user):
+    conversation_list = []
     user = json_util.loads(func_get_user(id_user))
     conversations = user['conversations']
+    for conver in conversations:
+        conversation_list.append(str(conver))
 
-    return conversations
+    response = {
+        'conversations': conversation_list
+    }
+
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/points', methods=['GET'])
