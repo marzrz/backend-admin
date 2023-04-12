@@ -227,9 +227,15 @@ def get_pretest(id_test):
 @app.route('/conversations/<id_conver>', methods=['GET'])
 def get_conversation(id_conver):
     conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(id_conver)})
-    conversation = json_util.dumps(conversation_document)
+    conversation = json_util.loads(json_util.dumps(conversation_document))
 
-    return conversation
+    response = {
+        'id': str(conversation['_id']),
+        'session': conversation['session'],
+        'messages': conversation['messages']
+    }
+
+    return jsonify(response)
 
 
 if __name__ == '__main__':
