@@ -115,20 +115,20 @@ def get_initialtest(id_user):
     return initialtest
 
 
-# @app.route('/users/<id_user>/game1', methods=['GET'])
-# def get_game1(id_user):
-#     user = json_util.loads(func_get_user(id_user))
-#     game1_part1 = user['game1_part1']
-#     game1_part2 = user['game1_part2']
-#
-#     response = {
-#         'questions_1': game1_part1['questions'],
-#         'points_1': game1_part1['totalPoints'],
-#         'questions_2': game1_part2['questions'],
-#         'points_2': game1_part2['totalPoints']
-#     }
-#
-#     return jsonify(response)
+@app.route('/users/<id_user>/game1', methods=['GET'])
+def get_game1(id_user):
+    user = json_util.loads(func_get_user(id_user))
+    game1_part1 = user['game1_part1']
+    game1_part2 = user['game1_part2']
+
+    response = {
+        'questions_1': game1_part1['questions'],
+        'points_1': game1_part1['totalPoints'],
+        'questions_2': game1_part2['questions'],
+        'points_2': game1_part2['totalPoints']
+    }
+
+    return jsonify(response)
 #
 #
 # @app.route('/users/<id_user>/game2', methods=['GET'])
