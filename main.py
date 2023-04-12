@@ -197,7 +197,7 @@ def get_game1(id_user):
 def get_pretests(id_user):
     pretest_list = []
     user = json_util.loads(func_get_user(id_user))
-    pretests = user['conversations']
+    pretests = user['pretests']
     for test in pretests:
         pretest_list.append(str(test))
 
