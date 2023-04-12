@@ -141,7 +141,7 @@ def get_game2(id_user):
         'points': game2['totalPoints']
     }
 
-    return game2
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/game3part1', methods=['GET'])
