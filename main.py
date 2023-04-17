@@ -50,16 +50,17 @@ def get_conversations(id_user):
     conversation_list = []
     user = json_util.loads(func_get_user(id_user))
     conversations = user['conversations']
-    for conver in conversations:
-        conversation_document = mongo.db.conversation.find_one({"_id": conver})
-        if conversation_document:
-            conversation = json_util.loads(json_util.dumps(conversation_document))
-            conver_item = {
-                'id_conver': str(conver),
-                'session': conversation['session'],
-                'n_messages': len(conversation['messages'])
-            }
-            conversation_list.append(conver_item)
+    if len(conversations) > 0:
+        for conver in conversations:
+            conversation_document = mongo.db.conversation.find_one({"_id": conver})
+            if conversation_document:
+                conversation = json_util.loads(json_util.dumps(conversation_document))
+                conver_item = {
+                    'id_conver': str(conver),
+                    'session': conversation['session'],
+                    'n_messages': len(conversation['messages'])
+                }
+                conversation_list.append(conver_item)
 
     response = {
         'conversations': conversation_list
