@@ -49,8 +49,8 @@ def get_user(id_user):
 def get_conversations(id_user):
     conversation_list = []
     user = json_util.loads(func_get_user(id_user))
-    conversations = user['conversations']
-    if len(conversations) > 0:
+    if user['initialized']:
+        conversations = user['conversations']
         for conver in conversations:
             conversation_document = mongo.db.conversation.find_one({"_id": conver})
             if conversation_document:
