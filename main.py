@@ -24,8 +24,11 @@ def get_users():
     # users = json_util.dumps(users_documents)
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        id_user = user['username']
-        user_list.append(id_user)
+        user = {
+            'id_user': str(user['_id']),
+            'username': user['username']
+        }
+        user_list.append(user)
 
     response = {
         'users': user_list
