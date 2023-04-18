@@ -211,7 +211,11 @@ def get_pretests(id_user):
     user = json_util.loads(func_get_user(id_user))
     pretests = user['pretests']
     for test in pretests:
-        pretest_list.append(str(test))
+        test = {
+            'id_test': str(test),
+            'index': pretests.index(test)+1
+        }
+        pretest_list.append(test)
 
     response = {
         'pretests': pretest_list
