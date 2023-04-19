@@ -1,5 +1,3 @@
-import datetime
-
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
@@ -9,7 +7,7 @@ import pandas as pd
 import data
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = "mongodb://localhost:27017/bon-app-petit"
+app.config['MONGO_URI'] = "mongodb://conversational.ugr.es:27020/bon-app-petit"
 mongo = PyMongo(app)
 
 
@@ -134,7 +132,6 @@ def get_initialtest(id_user):
 
 @app.route('/users/<id_user>/game/<id_game>', methods=['GET'])
 def get_game(id_user, id_game):
-
     user = json_util.loads(func_get_user(id_user))
     game1_1 = user['game1']
     game1_2 = user['game1_part2']
@@ -218,7 +215,7 @@ def get_pretests(id_user):
     for test in pretests:
         test = {
             'id_test': str(test),
-            'index': pretests.index(test)+1
+            'index': pretests.index(test) + 1
         }
         pretest_list.append(test)
 
@@ -258,14 +255,15 @@ def get_conversation(id_conver):
 
     return jsonify(response)
 
+
 @app.route('/conversations/<id_conver>/params', methods=['GET'])
 def get_parameters(id_conver):
     conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(id_conver)})
     conversation = json_util.loads(json_util.dumps(conversation_document))
-    last_message_index = len(conversation['messages'])-1
+    last_message_index = len(conversation['messages']) - 1
 
     if conversation['messages'][last_message_index]['user']:
-        last_message_index-=1
+        last_message_index -= 1
 
     response = {
         'params': conversation['messages'][last_message_index]['parameters']
@@ -295,9 +293,13 @@ def get_parameters(id_conver):
 @app.route('/exports/xlsx', methods=['GET'])
 def export_xlsx():
     demtest = data.demtest()
+    kidmed = data.kidmed()
+    data.paqc()
 
     with pd.ExcelWriter('data_bonappetit.xlsx') as writer:
         demtest.to_excel(writer, sheet_name='Test demográfico')
+        kidmed.to_excel(writer, sheet_name='Kidmed')
+        # paqc.to_excel(writer, sheet_name='Paqc')
 
     response = {}
 
@@ -305,9 +307,9 @@ def export_xlsx():
 
 
 if __name__ == '__main__':
-    import ssl
+    # import ssl
 
-    context = ssl.SSLContext()
-    context.load_cert_chain("/etc/ssl/certs/conversational_ugr_es.pem", "/etc/ssl/certs/conversational_ugr_es.key")
+    # context = ssl.SSLContext()
+    # context.load_cert_chain("/etc/ssl/certs/conversational_ugr_es.pem", "/etc/ssl/certs/conversational_ugr_es.key")
     CORS(app)
-    app.run(host='0.0.0.0', port=5500, ssl_context=context, debug=False)
+    app.run(host='localhost', port=4000, debug=True)
