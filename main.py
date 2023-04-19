@@ -295,10 +295,11 @@ def export_xlsx():
     user_documents = mongo.db.user.find()
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        demtest = json_util.loads(json_util.dumps(user['dem_test']))
-        demtest_age.append(demtest['age'])
-    df = pd.DataFrame(data=demtest_age)
-    print (df)
+        print (user['dem_test'])
+        # demtest = json_util.loads(json_util.dumps(user['dem_test']))
+        # demtest_age.append(demtest['age'])
+    # df = pd.DataFrame(data=demtest_age)
+    # print (df)
 
     response = {}
 
