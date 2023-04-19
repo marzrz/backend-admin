@@ -253,6 +253,18 @@ def get_conversation(id_conver):
 
     return jsonify(response)
 
+@app.route('/conversations/<id_conver>/params', methods=['GET'])
+def get_parameters(id_conver):
+    conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(id_conver)})
+    conversation = json_util.loads(json_util.dumps(conversation_document))
+    last_message_index = len(conversation['messages'])
+
+    response = {
+        'params': conversation['messages'][last_message_index]['parameters']
+    }
+
+    return jsonify(response)
+
 
 # LOGIN
 @app.route('/login', methods=['POST'])
