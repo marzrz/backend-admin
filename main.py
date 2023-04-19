@@ -272,19 +272,34 @@ def get_parameters(id_conver):
 
 
 # LOGIN
-@app.route('/login', methods=['POST'])
-def login():
-    user = request.json['username']
-    password = request.json['password']
+# @app.route('/login', methods=['POST'])
+# def login():
+#     user = request.json['username']
+#     password = request.json['password']
+#
+#     if user == 'admin' and password == 'admin':
+#         response = {
+#             'login': True
+#         }
+#     else:
+#         response = {
+#             'login': False
+#         }
+#
+#     return jsonify(response)
 
-    if user == 'admin' and password == 'admin':
-        response = {
-            'login': True
-        }
-    else:
-        response = {
-            'login': False
-        }
+# EXPORT
+@app.route('/exports/xlsx', methods=['GET'])
+def export_xlsx():
+    demtest_age = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        demtest_age.append(int(user['dem_test']['age']))
+    df = pd.DataFrame(data=demtest_age)
+    print (df)
+
+    response = {}
 
     return jsonify(response)
 
