@@ -2,6 +2,8 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 from bson import json_util, ObjectId
+import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = "mongodb://localhost:27017/bon-app-petit"
@@ -257,7 +259,10 @@ def get_conversation(id_conver):
 def get_parameters(id_conver):
     conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(id_conver)})
     conversation = json_util.loads(json_util.dumps(conversation_document))
-    last_message_index = len(conversation['messages'])
+    last_message_index = len(conversation['messages'])-1
+
+    if conversation['messages'][last_message_index]['user']:
+        last_message_index-=1
 
     response = {
         'params': conversation['messages'][last_message_index]['parameters']
