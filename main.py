@@ -21,7 +21,6 @@ def func_get_user(id):
 def get_users():
     user_list = []
     user_documents = mongo.db.user.find()
-    # users = json_util.dumps(users_documents)
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
         user = {
@@ -58,7 +57,8 @@ def get_conversations(id_user):
                 conver_item = {
                     'id_conver': str(conver),
                     'session': conversation['session'],
-                    'n_messages': len(conversation['messages'])
+                    'n_messages': len(conversation['messages']),
+                    'date': conversation['messages'][0]['date']
                 }
                 conversation_list.append(conver_item)
 
