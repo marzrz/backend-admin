@@ -40,14 +40,17 @@ def get_users():
 
     return jsonify(response)
 
-
-@app.route('/users/<id_user>', methods=['GET'])
+@app.route('/users/<id_user>/user', methods=['GET'])
 def get_user(id_user):
     user_document = mongo.db.user.find_one({"_id": ObjectId(id_user)})
-    user = json_util.dumps(user_document)
+    user = json_util.loads(json_util.dumps(user_document))
 
-    return user
+    response = {
+        'username': user['username'],
+        'id_user': str(user['_id'])
+    }
 
+    return jsonify(response)
 
 @app.route('/users/<id_user>/conversations', methods=['GET'])
 def get_conversations(id_user):
