@@ -294,12 +294,12 @@ def get_parameters(id_conver):
 def export_xlsx():
     demtest = data.demtest()
     kidmed = data.kidmed()
-    data.paqc()
+    paqc = data.paqc()
 
     with pd.ExcelWriter('data_bonappetit.xlsx') as writer:
         demtest.to_excel(writer, sheet_name='Test demográfico')
         kidmed.to_excel(writer, sheet_name='Kidmed')
-        # paqc.to_excel(writer, sheet_name='Paqc')
+        paqc.to_excel(writer, sheet_name='Paqc')
 
     response = {}
 

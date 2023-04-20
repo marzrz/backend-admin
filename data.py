@@ -113,134 +113,68 @@ def demtest():
     return df
 
 
-def kidmed():
-    total_kidmed = []
-    kidmed1 = []
-    kidmed2 = []
-    kidmed3 = []
-    kidmed4 = []
-    kidmed5 = []
-    kidmed6 = []
-    kidmed7 = []
-    kidmed8 = []
-    kidmed9 = []
-    kidmed10 = []
-    kidmed11 = []
-    kidmed12 = []
-    kidmed13 = []
-    kidmed14 = []
-    kidmed15 = []
-    kidmed16 = []
-    user_list = []
 
-    user_documents = mongo.db.user.find()
+def kidmed():
+    user_list = []
+    user_documents = list(mongo.db.user.find())
+    kidmed = [[None] * 17] * len(user_documents)
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
         user_list.append(user['username'])
-        if user['initialized']:
-            if user['kidmed_complete']:
-                kidmed_json = json_util.loads(json_util.dumps(user['kidmed']))
-                total_kidmed.append(user['total_kidmed'])
-                kidmed1.append(kidmed_json['kidmed1'])
-                kidmed2.append(kidmed_json['kidmed2'])
-                kidmed3.append(kidmed_json['kidmed3'])
-                kidmed4.append(kidmed_json['kidmed4'])
-                kidmed5.append(kidmed_json['kidmed5'])
-                kidmed6.append(kidmed_json['kidmed6'])
-                kidmed7.append(kidmed_json['kidmed7'])
-                kidmed8.append(kidmed_json['kidmed8'])
-                kidmed9.append(kidmed_json['kidmed9'])
-                kidmed10.append(kidmed_json['kidmed10'])
-                kidmed11.append(kidmed_json['kidmed11'])
-                kidmed12.append(kidmed_json['kidmed12'])
-                kidmed13.append(kidmed_json['kidmed13'])
-                kidmed14.append(kidmed_json['kidmed14'])
-                kidmed15.append(kidmed_json['kidmed15'])
-                kidmed16.append(kidmed_json['kidmed16'])
-            else:
-                total_kidmed.append(None)
-                kidmed1.append(None)
-                kidmed2.append(None)
-                kidmed3.append(None)
-                kidmed4.append(None)
-                kidmed5.append(None)
-                kidmed6.append(None)
-                kidmed7.append(None)
-                kidmed8.append(None)
-                kidmed9.append(None)
-                kidmed10.append(None)
-                kidmed11.append(None)
-                kidmed12.append(None)
-                kidmed13.append(None)
-                kidmed14.append(None)
-                kidmed15.append(None)
-                kidmed16.append(None)
-        else:
-            total_kidmed.append(None)
-            kidmed1.append(None)
-            kidmed2.append(None)
-            kidmed3.append(None)
-            kidmed4.append(None)
-            kidmed5.append(None)
-            kidmed6.append(None)
-            kidmed7.append(None)
-            kidmed8.append(None)
-            kidmed9.append(None)
-            kidmed10.append(None)
-            kidmed11.append(None)
-            kidmed12.append(None)
-            kidmed13.append(None)
-            kidmed14.append(None)
-            kidmed15.append(None)
-            kidmed16.append(None)
+        i = 0
+        if user['initialized'] and user['kidmed_complete']:
+            kidmed_json = json_util.loads(json_util.dumps(user['kidmed']))
+            for info in kidmed_json:
+                kidmed[user_documents.index(doc)][i] = kidmed_json[info]
+                i += 1
+            kidmed[user_documents.index(doc)][i] = user['total_kidmed']
+            i += 1
 
-    kidmed = {'total_kidmed': total_kidmed, 'kidmed1': kidmed1, 'kidmed2': kidmed2, 'kidmed3': kidmed3,
-              'kidmed4': kidmed4, 'kidmed5': kidmed5, 'kidmed6': kidmed6, 'kidmed7': kidmed7,
-              'kidmed9': kidmed9, 'kidmed10': kidmed10, 'kidmed11': kidmed11, 'kidmed12': kidmed12,
-              'kidmed13': kidmed13, 'kidmed14': kidmed14, 'kidmed15': kidmed15,
-              'kidmed16': kidmed16}
-    df = pd.DataFrame(kidmed, index=user_list)
 
-    return (df)
+    columns = [ 'kidmed1', 'kidmed2', 'kidmed3',
+               'kidmed4', 'kidmed5', 'kidmed6', 'kidmed7',
+               'kidmed8', 'kidmed9', 'kidmed10', 'kidmed11',
+               'kidmed12', 'kidmed13', 'kidmed14', 'kidmed15',
+               'kidmed16', 'total_kidmed']
+
+    df = pd.DataFrame(kidmed, index=user_list, columns=columns)
+
+    print(df)
+
+    return df
 
 
 def paqc():
     user_list = []
-
     user_documents = list(mongo.db.user.find())
     paqc = [[None] * 39] * len(user_documents)
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
         user_list.append(user['username'])
         i = 0
-        if user['initialized']:
-            if user['paqc_complete']:
-                paqc_json = json_util.loads(json_util.dumps(user['paqc']))
-                for info in paqc_json:
-                    print(info)
-                    paqcItem_json = json_util.loads(json_util.dumps(paqc_json[info]))
-                    if info == 'paqc_1':
-                        for sport in paqcItem_json:
-                            print(sport)
-                            # print(sport + ' ' + paqc_json[info][sport])
-                            paqc[user_documents.index(doc)][i] = paqc_json[info][sport]
-                            i += 1
-                    elif info == 'paqc_9':
-                        for day in paqcItem_json:
-                            print(day)
-                            # print(day + ' ' + paqc_json[info][day])
-                            paqc[user_documents.index(doc)][i] = paqc_json[info][day]
-                            i += 1
-                    elif info == 'paqc_10':
-                        for question in paqcItem_json:
-                            print(question)
-                            # print(question + ' ' + paqc_json[info][question])
-                            paqc[user_documents.index(doc)][i] = paqc_json[info][question]
-                            i += 1
-                    else:
-                        # print(info + ' ' + paqc_json[info])
-                        paqc[user_documents.index(doc)][i] = paqc_json[info]
+        if user['initialized'] and user['paqc_complete']:
+            paqc_json = json_util.loads(json_util.dumps(user['paqc']))
+            for info in paqc_json:
+                paqcItem_json = json_util.loads(json_util.dumps(paqc_json[info]))
+                if info == 'paqc_1':
+                    for sport in paqcItem_json:
+                        paqc[user_documents.index(doc)][i] = paqcItem_json[sport]
                         i += 1
+                elif info == 'paqc_9':
+                    for day in paqcItem_json:
+                        paqc[user_documents.index(doc)][i] = paqcItem_json[day]
+                        i += 1
+                elif info == 'paqc_10':
+                    for question in paqcItem_json:
+                        paqc[user_documents.index(doc)][i] = paqcItem_json[question]
+                        i += 1
+                else:
+                    paqc[user_documents.index(doc)][i] = paqcItem_json
+                    i += 1
+
+
+
+    # print(paqc)
 
     columns = ['paqc1_comba', 'paqc1_patinar', 'paqc1_pillapilla', 'paqc1_bicicleta',
                'paqc1_caminar', 'paqc1_correr', 'paqc1_aerobic', 'paqc1_natacion',
@@ -250,10 +184,10 @@ def paqc():
                'paqc1_musculacion', 'paqc1_marciales', 'paqc1_otros', 'paqc2', 'paqc3',
                'paqc4', 'paqc5', 'paqc6', 'paqc7', 'paqc8', 'paqc9_lunes', 'paqc9_martes',
                'paqc9_miercoles', 'paqc9_jueves', 'paqc9_viernes', 'paqc9_sabado', 'paqc9_domingo',
-               'pacq10_1, paqc10_2']
-    print(len(columns))
-    for col in columns:
-        print(col)
-    # df = pd.DataFrame(paqc, index=user_list, columns = columns)
+               'pacq10_1', 'paqc10_2']
 
-    return
+    df = pd.DataFrame(paqc, index=user_list, columns=columns)
+
+    # print(df)
+
+    return df
