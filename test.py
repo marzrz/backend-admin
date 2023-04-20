@@ -295,11 +295,15 @@ def export_xlsx():
     demtest = data.demtest()
     kidmed = data.kidmed()
     paqc = data.paqc()
+    pedsql = data.pedsql()
+    initialtest = data.initialtest()
 
     with pd.ExcelWriter('data_bonappetit.xlsx') as writer:
         demtest.to_excel(writer, sheet_name='Test demográfico')
         kidmed.to_excel(writer, sheet_name='Kidmed')
-        paqc.to_excel(writer, sheet_name='Paqc')
+        paqc.to_excel(writer, sheet_name='Paq-C')
+        pedsql.to_excel(writer, sheet_name='PedsQL')
+        initialtest.to_excel(writer, sheet_name='Test hábitos alimenticios')
 
     response = {}
 

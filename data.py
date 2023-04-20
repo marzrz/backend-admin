@@ -32,7 +32,6 @@ def demtest():
             for i in range(0, n_variables):
                 demtest[user_documents.index(doc)].append(None)
 
-
     df = pd.DataFrame(demtest, index=user_list, columns=columns)
 
     return df
@@ -108,5 +107,77 @@ def paqc():
                 paqc[user_documents.index(doc)].append(None)
 
     df = pd.DataFrame(paqc, index=user_list, columns=columns)
+
+    return df
+
+
+def pedsql():
+    user_list = []
+    columns = []
+    columns_complete = False
+    n_variables = 23
+    user_documents = list(mongo.db.user.find())
+    pedsql = [[None] * n_variables] * len(user_documents)
+    for doc in user_documents:
+        pedsql[user_documents.index(doc)] = []
+        user = json_util.loads(json_util.dumps(doc))
+        user_list.append(user['username'])
+        if user['initialized'] and user['pedsql_complete']:
+            pedsql_json = json_util.loads(json_util.dumps(user['pedsql']))
+            for info in pedsql_json:
+                pedsqlItem_json = json_util.loads(json_util.dumps(pedsql_json[info]))
+                if info == 'salud_actividades':
+                    for salud in pedsqlItem_json:
+                        if not columns_complete:
+                            columns.append(salud)
+                        pedsql[user_documents.index(doc)].append(pedsqlItem_json[salud])
+                elif info == 'sentimientos':
+                    for sentimiento in pedsqlItem_json:
+                        if not columns_complete:
+                            columns.append(sentimiento)
+                        pedsql[user_documents.index(doc)].append(pedsqlItem_json[sentimiento])
+                elif info == 'relaciones':
+                    for relacion in pedsqlItem_json:
+                        if not columns_complete:
+                            columns.append(relacion)
+                        pedsql[user_documents.index(doc)].append(pedsqlItem_json[relacion])
+                elif info == 'escolares':
+                    for escolar in pedsqlItem_json:
+                        if not columns_complete:
+                            columns.append(escolar)
+                        pedsql[user_documents.index(doc)].append(pedsqlItem_json[escolar])
+            columns_complete = True
+        else:
+            for i in range(0, n_variables):
+                pedsql[user_documents.index(doc)].append(None)
+
+    df = pd.DataFrame(pedsql, index=user_list, columns=columns)
+
+    return df
+
+
+def initialtest():
+    user_list = []
+    columns = []
+    columns_complete = False
+    n_variables = 18
+    user_documents = list(mongo.db.user.find())
+    initialtest = [[None] * n_variables] * len(user_documents)
+    for doc in user_documents:
+        initialtest[user_documents.index(doc)] = []
+        user = json_util.loads(json_util.dumps(doc))
+        user_list.append(user['username'])
+        if user['initialized'] and user['initial_test_complete']:
+            initialtest_json = json_util.loads(json_util.dumps(user['initial_test']))
+            for info in initialtest_json:
+                if not columns_complete:
+                    columns.append(info)
+                initialtest[user_documents.index(doc)].append(initialtest_json[info])
+            columns_complete = True
+        else:
+            for i in range(0, n_variables):
+                initialtest[user_documents.index(doc)].append(None)
+
+    df = pd.DataFrame(initialtest, index=user_list, columns=columns)
 
     return df
