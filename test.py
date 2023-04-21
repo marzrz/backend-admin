@@ -297,6 +297,15 @@ def export_xlsx():
     paqc = data.paqc()
     pedsql = data.pedsql()
     initialtest = data.initialtest()
+    # pretest
+    game1 = data.game1()
+    game2 = data.game2()
+    game3 = data.game3()
+    game4 = data.game4()
+    survey = data.survey()
+    pretest1 = data.pretests(1)
+    pretest2 = data.pretests(2)
+    pretest3 = data.pretests(3)
 
     with pd.ExcelWriter('data_bonappetit.xlsx') as writer:
         demtest.to_excel(writer, sheet_name='Test demográfico')
@@ -304,8 +313,18 @@ def export_xlsx():
         paqc.to_excel(writer, sheet_name='Paq-C')
         pedsql.to_excel(writer, sheet_name='PedsQL')
         initialtest.to_excel(writer, sheet_name='Test hábitos alimenticios')
+        pretest1.to_excel(writer, sheet_name='Evaluación 1')
+        pretest2.to_excel(writer, sheet_name='Evaluación 2')
+        pretest3.to_excel(writer, sheet_name='Evaluación 3')
+        game1.to_excel(writer, sheet_name='Juego 1')
+        game2.to_excel(writer, sheet_name='Juego 2')
+        game3.to_excel(writer, sheet_name='Juego 3')
+        game4.to_excel(writer, sheet_name='Juego 4')
+        survey.to_excel(writer, sheet_name='Encuesta')
 
-    response = {}
+    response = {
+        'message': 'success'
+    }
 
     return jsonify(response)
 

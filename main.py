@@ -40,6 +40,7 @@ def get_users():
 
     return jsonify(response)
 
+
 @app.route('/users/<id_user>/user', methods=['GET'])
 def get_user(id_user):
     user_document = mongo.db.user.find_one({"_id": ObjectId(id_user)})
@@ -51,6 +52,7 @@ def get_user(id_user):
     }
 
     return jsonify(response)
+
 
 @app.route('/users/<id_user>/conversations', methods=['GET'])
 def get_conversations(id_user):
@@ -137,7 +139,6 @@ def get_initialtest(id_user):
 
 @app.route('/users/<id_user>/game/<id_game>', methods=['GET'])
 def get_game(id_user, id_game):
-
     user = json_util.loads(func_get_user(id_user))
     game1_1 = user['game1']
     game1_2 = user['game1_part2']
@@ -221,7 +222,7 @@ def get_pretests(id_user):
     for test in pretests:
         test = {
             'id_test': str(test),
-            'index': pretests.index(test)+1
+            'index': pretests.index(test) + 1
         }
         pretest_list.append(test)
 
@@ -261,14 +262,15 @@ def get_conversation(id_conver):
 
     return jsonify(response)
 
+
 @app.route('/conversations/<id_conver>/params', methods=['GET'])
 def get_parameters(id_conver):
     conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(id_conver)})
     conversation = json_util.loads(json_util.dumps(conversation_document))
-    last_message_index = len(conversation['messages'])-1
+    last_message_index = len(conversation['messages']) - 1
 
     if conversation['messages'][last_message_index]['user']:
-        last_message_index-=1
+        last_message_index -= 1
 
     response = {
         'params': conversation['messages'][last_message_index]['parameters']
@@ -298,11 +300,37 @@ def get_parameters(id_conver):
 @app.route('/exports/xlsx', methods=['GET'])
 def export_xlsx():
     demtest = data.demtest()
+    kidmed = data.kidmed()
+    paqc = data.paqc()
+    pedsql = data.pedsql()
+    initialtest = data.initialtest()
+    pretest1 = data.pretests(1)
+    pretest2 = data.pretests(2)
+    pretest3 = data.pretests(3)
+    game1 = data.game1()
+    game2 = data.game2()
+    game3 = data.game3()
+    game4 = data.game4()
+    survey = data.survey()
 
     with pd.ExcelWriter('data_bonappetit.xlsx') as writer:
         demtest.to_excel(writer, sheet_name='Test demográfico')
+        kidmed.to_excel(writer, sheet_name='Kidmed')
+        paqc.to_excel(writer, sheet_name='Paq-C')
+        pedsql.to_excel(writer, sheet_name='PedsQL')
+        initialtest.to_excel(writer, sheet_name='Test hábitos alimenticios')
+        pretest1.to_excel(writer, sheet_name='Evaluación 1')
+        pretest2.to_excel(writer, sheet_name='Evaluación 2')
+        pretest3.to_excel(writer, sheet_name='Evaluación 3')
+        game1.to_excel(writer, sheet_name='Juego 1')
+        game2.to_excel(writer, sheet_name='Juego 2')
+        game3.to_excel(writer, sheet_name='Juego 3')
+        game4.to_excel(writer, sheet_name='Juego 4')
+        survey.to_excel(writer, sheet_name='Encuesta')
 
-    response = {}
+    response = {
+        'message': 'success'
+    }
 
     return jsonify(response)
 
