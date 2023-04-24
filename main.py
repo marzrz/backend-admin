@@ -280,21 +280,26 @@ def get_parameters(id_conver):
 
 
 # LOGIN
-# @app.route('/login', methods=['POST'])
-# def login():
-#     user = request.json['username']
-#     password = request.json['password']
-#
-#     if user == 'admin' and password == 'admin':
-#         response = {
-#             'login': True
-#         }
-#     else:
-#         response = {
-#             'login': False
-#         }
-#
-#     return jsonify(response)
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json["username"]
+    password = request.json["password"]
+    userDocument = mongo.db.admin.find_one({"username": username, "password": password})
+
+    if (userDocument):
+        user = json_util.loads(json_util.dumps(userDocument))
+        objectId = str(user['_id'])
+        data = {
+            'exists': True,
+            'token': objectId
+        }
+    else:
+        data = {
+            'exists': False,
+            'token': ''
+        }
+
+    return jsonify(data)
 
 # EXPORT
 @app.route('/exports/xlsx', methods=['GET'])
