@@ -269,7 +269,7 @@ def get_parameters(id_conver):
     conversation = json_util.loads(json_util.dumps(conversation_document))
     last_message_index = len(conversation['messages']) - 1
 
-    if conversation['messages'][last_message_index]['user']:
+    if conversation['messages'][last_message_index]['user'] == 'user':
         last_message_index -= 1
 
     response = {
