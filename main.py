@@ -304,7 +304,7 @@ def login():
 # EXPORT
 @app.route('/exports/xlsx', methods=['GET'])
 def export_xlsx():
-    file = './data_bonappetit.xlsx'
+    file = '/home/marina/dev/backend-admin/data_bonappetit.xlsx'
     demtest = data.demtest()
     kidmed = data.kidmed()
     paqc = data.paqc()
