@@ -304,6 +304,7 @@ def login():
 # EXPORT
 @app.route('/exports/xlsx', methods=['GET'])
 def export_xlsx():
+    file = 'data_bonappetit.xlsx'
     demtest = data.demtest()
     kidmed = data.kidmed()
     paqc = data.paqc()
@@ -318,9 +319,10 @@ def export_xlsx():
     game4 = data.game4()
     survey = data.survey()
 
-    os.remove("data_bonappetit.xlsx")
+    if os.path.exists(file):
+        os.remove(file)
 
-    with pd.ExcelWriter('data_bonappetit.xlsx') as writer:
+    with pd.ExcelWriter(file) as writer:
         demtest.to_excel(writer, sheet_name='Test demográfico')
         kidmed.to_excel(writer, sheet_name='Kidmed')
         paqc.to_excel(writer, sheet_name='Paq-C')
