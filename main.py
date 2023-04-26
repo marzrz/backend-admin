@@ -320,6 +320,7 @@ def export_xlsx():
     survey = data.survey()
 
     if os.path.exists(file):
+        os.chmod(file, 0o777)
         os.remove(file)
 
     with pd.ExcelWriter(file) as writer:
