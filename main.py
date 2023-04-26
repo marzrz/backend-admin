@@ -304,7 +304,8 @@ def login():
 # EXPORT
 @app.route('/exports/xlsx', methods=['GET'])
 def export_xlsx():
-    file = '/home/marina/dev/backend-admin/data_bonappetit.xlsx'
+    absolute_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+    # file = '/home/marina/dev/backend-admin/data_bonappetit.xlsx'
     demtest = data.demtest()
     kidmed = data.kidmed()
     paqc = data.paqc()
@@ -319,24 +320,24 @@ def export_xlsx():
     game4 = data.game4()
     survey = data.survey()
 
-    if os.path.exists(file):
-        os.chmod(file, 0o777)
-        os.remove(file)
+    for file in os.listdir(absolute_path):
+        if file.endswith('.xlsx'):
+            os.remove(os.path.join(absolute_path, file))
 
-    with pd.ExcelWriter(file) as writer:
-        demtest.to_excel(writer, sheet_name='Test demográfico')
-        kidmed.to_excel(writer, sheet_name='Kidmed')
-        paqc.to_excel(writer, sheet_name='Paq-C')
-        pedsql.to_excel(writer, sheet_name='PedsQL')
-        initialtest.to_excel(writer, sheet_name='Test hábitos alimenticios')
-        pretest1.to_excel(writer, sheet_name='Evaluación 1')
-        pretest2.to_excel(writer, sheet_name='Evaluación 2')
-        pretest3.to_excel(writer, sheet_name='Evaluación 3')
-        game1.to_excel(writer, sheet_name='Juego 1')
-        game2.to_excel(writer, sheet_name='Juego 2')
-        game3.to_excel(writer, sheet_name='Juego 3')
-        game4.to_excel(writer, sheet_name='Juego 4')
-        survey.to_excel(writer, sheet_name='Encuesta')
+            with pd.ExcelWriter(os.path.join(absolute_path, file)) as writer:
+                demtest.to_excel(writer, sheet_name='Test demográfico')
+                kidmed.to_excel(writer, sheet_name='Kidmed')
+                paqc.to_excel(writer, sheet_name='Paq-C')
+                pedsql.to_excel(writer, sheet_name='PedsQL')
+                initialtest.to_excel(writer, sheet_name='Test hábitos alimenticios')
+                pretest1.to_excel(writer, sheet_name='Evaluación 1')
+                pretest2.to_excel(writer, sheet_name='Evaluación 2')
+                pretest3.to_excel(writer, sheet_name='Evaluación 3')
+                game1.to_excel(writer, sheet_name='Juego 1')
+                game2.to_excel(writer, sheet_name='Juego 2')
+                game3.to_excel(writer, sheet_name='Juego 3')
+                game4.to_excel(writer, sheet_name='Juego 4')
+                survey.to_excel(writer, sheet_name='Encuesta')
 
     response = {
         'file': 'https://conversational.ugr.es/bonappetit/uws3d/static/data_bonappetit.xlsx'
