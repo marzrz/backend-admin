@@ -334,7 +334,7 @@ def export_xlsx():
         survey.to_excel(writer, sheet_name='Encuesta')
 
     response = {
-        'message': 'success'
+        'file': 'https://conversational.ugr.es/bonappetit/uws3d/static/data_bonappetit.xlsx'
     }
 
     return jsonify(response)
