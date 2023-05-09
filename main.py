@@ -161,6 +161,24 @@ def get_paqc(id_user):
 
     return paqc
 
+@app.route('/users/paqc', methods=['GET'])
+def get_paqc_all():
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            tests.append(user['paqc'])
+            users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
+
 
 @app.route('/users/<id_user>/pedsql', methods=['GET'])
 def get_pedsql(id_user):
@@ -169,6 +187,24 @@ def get_pedsql(id_user):
 
     return pedsql
 
+@app.route('/users/pedsql', methods=['GET'])
+def get_pedsql_all():
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            tests.append(user['pedsql'])
+            users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
+
 
 @app.route('/users/<id_user>/initialtest', methods=['GET'])
 def get_initialtest(id_user):
@@ -176,6 +212,24 @@ def get_initialtest(id_user):
     initialtest = user['initial_test']
 
     return initialtest
+
+@app.route('/users/initialtest', methods=['GET'])
+def get_initialtest_all():
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            tests.append(user['initial_test'])
+            users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/game/<id_game>', methods=['GET'])
@@ -253,6 +307,24 @@ def get_game1(id_user):
     survey = user['survey']
 
     return survey
+
+@app.route('/users/survey', methods=['GET'])
+def get_survey_all():
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            tests.append(user['survey'])
+            users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
 
 
 @app.route('/users/<id_user>/pretests', methods=['GET'])
