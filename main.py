@@ -92,6 +92,23 @@ def get_points(id_user):
 
     return jsonify(response)
 
+@app.route('/users/kidmed', methods=['GET'])
+def get_kidmed_all():
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            tests.append(user['kidmed'])
+            users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
 
 @app.route('/users/<id_user>/kidmed', methods=['GET'])
 def get_kidmed(id_user):
@@ -121,7 +138,7 @@ def get_demtest_all():
     user_documents = mongo.db.user.find()
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if (user['initialized']):
+        if user['initialized']:
             tests.append(user['dem_test'])
             users.append(user['username'])
 
