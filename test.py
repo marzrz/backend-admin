@@ -297,7 +297,6 @@ def export_xlsx():
     paqc = data.paqc()
     pedsql = data.pedsql()
     initialtest = data.initialtest()
-    # pretest
     game1 = data.game1()
     game2 = data.game2()
     game3 = data.game3()
