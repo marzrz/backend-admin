@@ -30,7 +30,8 @@ def get_users():
         user = json_util.loads(json_util.dumps(doc))
         user = {
             'id_user': str(user['_id']),
-            'username': user['username']
+            'username': user['username'],
+            'initialized': user['initialized']
         }
         user_list.append(user)
 
@@ -48,7 +49,8 @@ def get_user(id_user):
 
     response = {
         'username': user['username'],
-        'id_user': str(user['_id'])
+        'id_user': str(user['_id']),
+        'initialized': user['initialized']
     }
 
     return jsonify(response)
