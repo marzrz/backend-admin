@@ -106,6 +106,25 @@ def get_demtest(id_user):
     return demtest
 
 
+@app.route('/users/demtest', methods=['GET'])
+def get_demtest_all():
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if (user['initialized']):
+            tests.append(user['dem_test'])
+            users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
+
+
 @app.route('/users/<id_user>/paqc', methods=['GET'])
 def get_paqc(id_user):
     user = json_util.loads(func_get_user(id_user))
@@ -271,23 +290,6 @@ def get_parameters(id_conver):
 
     return jsonify(response)
 
-
-# LOGIN
-# @app.route('/login', methods=['POST'])
-# def login():
-#     user = request.json['username']
-#     password = request.json['password']
-#
-#     if user == 'admin' and password == 'admin':
-#         response = {
-#             'login': True
-#         }
-#     else:
-#         response = {
-#             'login': False
-#         }
-#
-#     return jsonify(response)
 
 # EXPORT
 @app.route('/exports/xlsx', methods=['GET'])
