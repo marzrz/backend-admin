@@ -100,7 +100,11 @@ def get_kidmed_all():
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
-            tests.append(user['kidmed'])
+            kidmed = {
+                'kidmed': user['kidmed'],
+                'points': user['total_kidmed']
+            }
+            tests.append(kidmed)
             users.append(user['username'])
 
     response = {
