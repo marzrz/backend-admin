@@ -365,7 +365,6 @@ def get_all_pretests(index_test):
     tests = []
     users = []
     points = []
-    ids = []
     user_documents = mongo.db.user.find()
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
@@ -375,11 +374,9 @@ def get_all_pretests(index_test):
                 pretest = json_util.loads(json_util.dumps(pretest_document))
                 tests.append(pretest['questions'])
                 points.append(pretest['totalPoints'])
-                ids.append(pretest['_id'])
                 users.append(user['username'])
 
     response = {
-        'id_test': ids,
         'tests': tests,
         'points': points,
         'users': users
