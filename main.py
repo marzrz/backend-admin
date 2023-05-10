@@ -373,7 +373,7 @@ def get_all_pretests(index_test):
                 pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(user['pretests'][int(index_test)])})
                 pretest = json_util.loads(json_util.dumps(pretest_document))
                 tests.append(pretest['questions'])
-                points.append(pretest['totalPoints'])
+                points.append(str(pretest['totalPoints']))
                 users.append(user['username'])
 
     response = {
