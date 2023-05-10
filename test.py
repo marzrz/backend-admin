@@ -243,6 +243,24 @@ def get_game1(id_user):
 
     return survey
 
+@app.route('/users/survey', methods=['GET'])
+def get_survey_all():
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            tests.append(user['survey'])
+            users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
+
 
 @app.route('/users/<id_user>/pretests', methods=['GET'])
 def get_pretests(id_user):
@@ -277,6 +295,29 @@ def get_pretest(id_test):
 
     return jsonify(response)
 
+@app.route('/users/pretests/<index_test>', methods=['GET'])
+def get_all_pretests(index_test):
+    tests = []
+    users = []
+    points = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            if len(user['pretests']) > 0:
+                pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(user['pretests'][int(index_test)])})
+                pretest = json_util.loads(json_util.dumps(pretest_document))
+                tests.append(pretest['questions'])
+                points.append(pretest['totalPoints'])
+                users.append(user['username'])
+
+    response = {
+        'tests': tests,
+        'points': points,
+        'users': users
+    }
+
+    return jsonify(response)
 
 # CONVERSATION
 @app.route('/conversations/<id_conver>', methods=['GET'])
