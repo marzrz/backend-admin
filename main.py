@@ -300,24 +300,6 @@ def get_game(id_user, id_game):
 
     return jsonify(response)
 
-@app.route('/users/initialtest', methods=['GET'])
-def get_initialtest_all():
-    tests = []
-    users = []
-    user_documents = mongo.db.user.find()
-    for doc in user_documents:
-        user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
-            tests.append(user['initial_test'])
-            users.append(user['username'])
-
-    response = {
-        'tests': tests,
-        'users': users
-    }
-
-    return jsonify(response)
-
 
 @app.route('/users/<id_user>/survey', methods=['GET'])
 def get_game1(id_user):
