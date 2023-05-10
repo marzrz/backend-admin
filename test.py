@@ -304,11 +304,15 @@ def get_all_pretests(index_test):
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
-            if len(user['pretests']) > 0:
+            if len(user['pretests']) > int(index_test):
                 pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(user['pretests'][int(index_test)])})
                 pretest = json_util.loads(json_util.dumps(pretest_document))
                 tests.append(pretest['questions'])
                 points.append(pretest['totalPoints'])
+                users.append(user['username'])
+            else:
+                tests.append([])
+                points.append(None)
                 users.append(user['username'])
 
     response = {
