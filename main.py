@@ -568,6 +568,42 @@ def export_xlsx():
 
     return jsonify(response)
 
+@app.route('/exports/xlsx/<test>', methods=['GET'])
+def export_xlsx(test):
+    file = '/home/marina/dev/backend-admin/data_bonappetit_'+test+'.xlsx'
+    if test == 'demtest':
+        test_data = data.demtest()
+    if test == 'kidmed':
+        test_data = data.kidmed()
+    if test == 'paqc':
+        test_data = data.paqc()
+    if test == 'pedsql':
+        test_data = data.pedsql()
+    if test == 'initialtest':
+        test_data = data.initialtest()
+    if test == 'pretest1':
+        test_data = data.pretests(1)
+    if test == 'pretest2':
+        test_data = data.pretests(2)
+    if test == 'pretest3':
+        test_data = data.pretests(3)
+    if test == 'game1':
+        test_data = data.game1()
+    if test == 'game2':
+        test_data = data.game2()
+    if test == 'game3':
+        test_data = data.game3()
+    if test == 'game4':
+        test_data = data.game4()
+
+    test_data.to_excel(file)
+
+    response = {
+        'file': 'https://conversational.ugr.es/bonappetit/uws3d/static/data_bonappetit_'+test+'.xlsx'
+    }
+
+    return jsonify(response)
+
 
 if __name__ == '__main__':
     import ssl
