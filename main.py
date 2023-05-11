@@ -569,7 +569,7 @@ def export_xlsx():
     return jsonify(response)
 
 @app.route('/exports/xlsx/<test>', methods=['GET'])
-def export_xlsx(test):
+def export_xlsx_test(test):
     file = '/home/marina/dev/backend-admin/data_bonappetit_'+test+'.xlsx'
     if test == 'demtest':
         test_data = data.demtest()
