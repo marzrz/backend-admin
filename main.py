@@ -570,6 +570,7 @@ def export_xlsx():
 
 @app.route('/exports/xlsx/<test>', methods=['GET'])
 def export_xlsx_test(test):
+    test_data = ''
     file = '/home/marina/dev/backend-admin/data_bonappetit_'+test+'.xlsx'
     if test == 'demtest':
         test_data = data.demtest()
