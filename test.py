@@ -235,6 +235,92 @@ def get_game(id_user, id_game):
 
     return jsonify(response)
 
+@app.route('/users/games/<id_game>', methods=['GET'])
+def get_game_all(id_game):
+    tests = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            if user['game1_part2_complete']:
+                game1_1 = user['game1']
+            else:
+                game1_1 = user['game1_part1']
+            game1_2 = user['game1_part2']
+            game2 = user['game2']
+            if user['game3_part2_complete']:
+                game3_1 = user['game3']
+            else:
+                game3_1 = user['game3_part1']
+            game3_2 = user['game3_part2']
+            game4 = user['game4']
+
+            users.append(user['username'])
+
+            if id_game == "1":
+                if user['game1_part2_complete']:
+                    data = {
+                        'questions_1': game1_1['questions'],
+                        'points_1': game1_1['totalPoints'],
+                        'questions_2': game1_2['questions'],
+                        'points_2': game1_2['totalPoints']
+                    }
+                else:
+                    data = {
+                        'questions_1': [],
+                        'points_1': None,
+                        'questions_2': [],
+                        'points_2': None
+                    }
+                tests.append(data)
+            elif id_game == "2":
+                if user['game2_complete']:
+                    data = {
+                        'questions': game2['questions'],
+                        'points': game2['totalPoints']
+                    }
+                else:
+                    data = {
+                        'questions': [],
+                        'points': None
+                    }
+                tests.append(data)
+            elif id_game == "3":
+                if user['game3_part2_complete']:
+                    data = {
+                        'questions_1': game3_1['questions'],
+                        'points_1': game3_1['totalPoints'],
+                        'questions_2': game3_2['questions'],
+                        'points_2': game3_2['totalPoints']
+                    }
+                else:
+                    data = {
+                        'questions_1': [],
+                        'points_1': None,
+                        'questions_2': [],
+                        'points_2': None
+                    }
+                tests.append(data)
+            elif id_game == "4":
+                if user['game4_complete']:
+                    data = {
+                        'questions': game4['questions'],
+                        'points': game4['totalPoints']
+                    }
+                else:
+                    data = {
+                        'questions': [],
+                        'points': None
+                    }
+                tests.append(data)
+
+    response = {
+        'tests': tests,
+        'users': users
+    }
+
+    return jsonify(response)
 
 @app.route('/users/<id_user>/survey', methods=['GET'])
 def get_game1(id_user):
