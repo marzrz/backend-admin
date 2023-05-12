@@ -570,10 +570,8 @@ def export_xlsx():
 
 @app.route('/exports/xlsx/<test>', methods=['GET'])
 def export_xlsx_test(test):
-    global test_data
     file = '/home/marina/dev/backend-admin/data_bonappetit_'+test+'.xlsx'
-    if test == 'demtest':
-        test_data = data.demtest()
+    test_data = data.demtest()
     if test == 'kidmed':
         test_data = data.kidmed()
     if test == 'paqc':
@@ -600,7 +598,7 @@ def export_xlsx_test(test):
     test_data.to_excel(file)
 
     response = {
-        'file': 'https://conversational.ugr.es/bonappetit/uws3d/static/data_bonappetit_'+test+'.xlsx'
+        'file': 'https://conversational.ugr.es/bonappetit/uws3d/static/data/backend-admin/data_bonappetit_'+test+'.xlsx'
     }
 
     return jsonify(response)
