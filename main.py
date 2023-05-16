@@ -81,17 +81,6 @@ def get_conversations(id_user):
     return jsonify(response)
 
 
-@app.route('/users/<id_user>/points', methods=['GET'])
-def get_points(id_user):
-    user = json_util.loads(func_get_user(id_user))
-    points = user['points']
-
-    response = {
-        'points': points
-    }
-
-    return jsonify(response)
-
 @app.route('/users/kidmed', methods=['GET'])
 def get_kidmed_all():
     tests = []
