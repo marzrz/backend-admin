@@ -72,18 +72,6 @@ def get_conversations(id_user):
     return jsonify(response)
 
 
-@app.route('/users/<id_user>/points', methods=['GET'])
-def get_points(id_user):
-    user = json_util.loads(func_get_user(id_user))
-    points = user['points']
-
-    response = {
-        'points': points
-    }
-
-    return jsonify(response)
-
-
 @app.route('/users/<id_user>/kidmed', methods=['GET'])
 def get_kidmed(id_user):
     user = json_util.loads(func_get_user(id_user))
@@ -408,6 +396,98 @@ def get_all_pretests(index_test):
     }
 
     return jsonify(response)
+
+
+@app.route('/users/<id_user>/points', methods=['GET'])
+def get_points(id_user):
+    points = 0
+    pretest = []
+    game1 = 0
+    game1_part2 = 0
+    game2 = 0
+    game3 = 0
+    game3_part2 = 0
+    game4 = 0
+    user = json_util.loads(func_get_user(id_user))
+    pretest_list = user['pretests']
+
+    for i in range(3):
+        if i <= len(pretest_list)-1:
+            pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(pretest_list[i])})
+            pretests = json_util.loads(json_util.dumps(pretest_document))
+            pretest.append(pretests['totalPoints'])
+            points += pretests['totalPoints']
+        else:
+            pretest.append(0)
+    if user['game1_part2_complete']:
+        game1 = user['game1']['totalPoints']
+        game1_part2 = user['game1_part2']['totalPoints']
+        points += user['game1']['totalPoints']
+        points += user['game1_part2']['totalPoints']
+    else:
+        game1 = 0
+        game1_part2 = 0
+    if user['game2_complete']:
+        game2 = user['game2']['totalPoints']
+        points += user['game2']['totalPoints']
+    else:
+        game2 = 0
+    if user['game3_part2_complete']:
+        game3 = user['game3']['totalPoints']
+        game3_part2 = user['game3_part2']['totalPoints']
+        points += user['game3']['totalPoints']
+        points += user['game3_part2']['totalPoints']
+    else:
+        game3 = 0
+        game3_part2 = 0
+    if user['game4_complete']:
+        game4 = user['game4']['totalPoints']
+        points += user['game4']['totalPoints']
+    else:
+        game4 = 0
+
+    response = {
+        'pretest1': pretest[0],
+        'pretest2': pretest[1],
+        'pretest3': pretest[2],
+        'game1': game1,
+        'game1_part2': game1_part2,
+        'game2': game2,
+        'game3': game3,
+        'game3_part2': game3_part2,
+        'game4': game4,
+        'total_points': points
+    }
+
+    return jsonify(response)
+
+
+@app.route('/users/<id_user>/fruit', methods=['GET'])
+def get_fruit(id_user):
+    total_fruit = 0
+    conversations_complete = 0
+    user = json_util.loads(func_get_user(id_user))
+    for conver in user['conversations']:
+        conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
+        conversation = json_util.loads(json_util.dumps(conversation_document))
+        if conversation['messages'][-1]['user'] == "bot":
+            if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
+                total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
+                conversations_complete += 1
+        else:
+            if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
+                total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
+                conversations_complete += 1
+
+    response = {
+        'total': total_fruit,
+        'average': round(total_fruit/conversations_complete, 2),
+        'conver_complete': conversations_complete,
+        'total_conver': len(user['conversations'])
+    }
+
+    return jsonify(response)
+
 
 # CONVERSATION
 @app.route('/conversations/<id_conver>', methods=['GET'])
