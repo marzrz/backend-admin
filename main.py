@@ -494,6 +494,44 @@ def get_points(id_user):
     return jsonify(response)
 
 
+@app.route('/users/points', methods=['GET'])
+def get_points_all():
+    points_array = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        points = 0
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            pretest_list = user['pretests']
+            users.append(user['username'])
+
+            for i in range(3):
+                if i <= len(pretest_list)-1:
+                    pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(pretest_list[i])})
+                    pretests = json_util.loads(json_util.dumps(pretest_document))
+                    points += pretests['totalPoints']
+            if user['game1_part2_complete']:
+                points += user['game1']['totalPoints']
+                points += user['game1_part2']['totalPoints']
+            if user['game2_complete']:
+                points += user['game2']['totalPoints']
+            if user['game3_part2_complete']:
+                points += user['game3']['totalPoints']
+                points += user['game3_part2']['totalPoints']
+            if user['game4_complete']:
+                points += user['game4']['totalPoints']
+
+            points_array.append(points)
+
+    response = {
+        'points': points_array,
+        'users': users
+    }
+
+    return jsonify(response)
+
+
 @app.route('/users/<id_user>/info', methods=['GET'])
 def get_info(id_user):
     total_fruit = 0
@@ -512,12 +550,13 @@ def get_info(id_user):
                     total_chuches += 1
                 conversations_complete += 1
         else:
-            if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
-                total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
-                total_water += conversation['messages'][-2]['parameters']['vecesAgua']
-                if conversation['messages'][-2]['parameters']['chuches'] != "No":
-                    total_chuches += 1
-                conversations_complete += 1
+            if conversation['messages'][-2]['user'] == "bot":
+                if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
+                    total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
+                    total_water += conversation['messages'][-2]['parameters']['vecesAgua']
+                    if conversation['messages'][-2]['parameters']['chuches'] != "No":
+                        total_chuches += 1
+                    conversations_complete += 1
 
     response = {
         'total_fruit': total_fruit,
@@ -528,6 +567,59 @@ def get_info(id_user):
         'average_chuches': round(total_chuches/conversations_complete, 2),
         'total_water': total_water,
         'average_water': round(total_water/conversations_complete, 2)
+    }
+
+    return jsonify(response)
+
+
+@app.route('/users/info', methods=['GET'])
+def get_info_all():
+    data_array = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        total_fruit = 0
+        total_chuches = 0
+        total_water = 0
+        conversations_complete = 0
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            users.append(user['username'])
+            for conver in user['conversations']:
+                conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
+                conversation = json_util.loads(json_util.dumps(conversation_document))
+                if conversation['messages'][-1]['user'] == "bot":
+                    if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
+                        total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
+                        total_water += conversation['messages'][-1]['parameters']['vecesAgua']
+                        if conversation['messages'][-1]['parameters']['chuches'] != "No":
+                            total_chuches += 1
+                        conversations_complete += 1
+                else:
+                    if conversation['messages'][-2]['user'] == "bot":
+                        if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
+                            total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
+                            total_water += conversation['messages'][-2]['parameters']['vecesAgua']
+                            if conversation['messages'][-2]['parameters']['chuches'] != "No":
+                                total_chuches += 1
+                            conversations_complete += 1
+
+            data = {
+                'total_fruit': total_fruit,
+                'average_fruit': round(total_fruit/conversations_complete, 2),
+                'conver_complete': conversations_complete,
+                'total_conver': len(user['conversations']),
+                'total_chuches': total_chuches,
+                'average_chuches': round(total_chuches/conversations_complete, 2),
+                'total_water': total_water,
+                'average_water': round(total_water/conversations_complete, 2)
+            }
+
+            data_array.append(data)
+
+    response = {
+        'info': data_array,
+        'users': users
     }
 
     return jsonify(response)

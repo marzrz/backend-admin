@@ -401,13 +401,6 @@ def get_all_pretests(index_test):
 @app.route('/users/<id_user>/points', methods=['GET'])
 def get_points(id_user):
     points = 0
-    pretest = []
-    game1 = 0
-    game1_part2 = 0
-    game2 = 0
-    game3 = 0
-    game3_part2 = 0
-    game4 = 0
     user = json_util.loads(func_get_user(id_user))
     pretest_list = user['pretests']
 
@@ -415,48 +408,58 @@ def get_points(id_user):
         if i <= len(pretest_list)-1:
             pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(pretest_list[i])})
             pretests = json_util.loads(json_util.dumps(pretest_document))
-            pretest.append(pretests['totalPoints'])
             points += pretests['totalPoints']
-        else:
-            pretest.append(0)
     if user['game1_part2_complete']:
-        game1 = user['game1']['totalPoints']
-        game1_part2 = user['game1_part2']['totalPoints']
         points += user['game1']['totalPoints']
         points += user['game1_part2']['totalPoints']
-    else:
-        game1 = 0
-        game1_part2 = 0
     if user['game2_complete']:
-        game2 = user['game2']['totalPoints']
         points += user['game2']['totalPoints']
-    else:
-        game2 = 0
     if user['game3_part2_complete']:
-        game3 = user['game3']['totalPoints']
-        game3_part2 = user['game3_part2']['totalPoints']
         points += user['game3']['totalPoints']
         points += user['game3_part2']['totalPoints']
-    else:
-        game3 = 0
-        game3_part2 = 0
     if user['game4_complete']:
-        game4 = user['game4']['totalPoints']
         points += user['game4']['totalPoints']
-    else:
-        game4 = 0
 
     response = {
-        'pretest1': pretest[0],
-        'pretest2': pretest[1],
-        'pretest3': pretest[2],
-        'game1': game1,
-        'game1_part2': game1_part2,
-        'game2': game2,
-        'game3': game3,
-        'game3_part2': game3_part2,
-        'game4': game4,
         'total_points': points
+    }
+
+    return jsonify(response)
+
+
+@app.route('/users/points', methods=['GET'])
+def get_points_all():
+    points_array = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        points = 0
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            pretest_list = user['pretests']
+            users.append(user['username'])
+
+            for i in range(3):
+                if i <= len(pretest_list)-1:
+                    pretest_document = mongo.db.pretest.find_one({"_id": ObjectId(pretest_list[i])})
+                    pretests = json_util.loads(json_util.dumps(pretest_document))
+                    points += pretests['totalPoints']
+            if user['game1_part2_complete']:
+                points += user['game1']['totalPoints']
+                points += user['game1_part2']['totalPoints']
+            if user['game2_complete']:
+                points += user['game2']['totalPoints']
+            if user['game3_part2_complete']:
+                points += user['game3']['totalPoints']
+                points += user['game3_part2']['totalPoints']
+            if user['game4_complete']:
+                points += user['game4']['totalPoints']
+
+            points_array.append(points)
+
+    response = {
+        'points': points_array,
+        'users': users
     }
 
     return jsonify(response)
@@ -496,6 +499,59 @@ def get_info(id_user):
         'average_chuches': round(total_chuches/conversations_complete, 2),
         'total_water': total_water,
         'average_water': round(total_water/conversations_complete, 2)
+    }
+
+    return jsonify(response)
+
+
+@app.route('/users/info', methods=['GET'])
+def get_info_all():
+    data_array = []
+    users = []
+    user_documents = mongo.db.user.find()
+    for doc in user_documents:
+        total_fruit = 0
+        total_chuches = 0
+        total_water = 0
+        conversations_complete = 0
+        user = json_util.loads(json_util.dumps(doc))
+        if user['initialized']:
+            users.append(user['username'])
+            for conver in user['conversations']:
+                conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
+                conversation = json_util.loads(json_util.dumps(conversation_document))
+                if conversation['messages'][-1]['user'] == "bot":
+                    if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
+                        total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
+                        total_water += conversation['messages'][-1]['parameters']['vecesAgua']
+                        if conversation['messages'][-1]['parameters']['chuches'] != "No":
+                            total_chuches += 1
+                        conversations_complete += 1
+                else:
+                    if conversation['messages'][-2]['user'] == "bot":
+                        if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
+                            total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
+                            total_water += conversation['messages'][-2]['parameters']['vecesAgua']
+                            if conversation['messages'][-2]['parameters']['chuches'] != "No":
+                                total_chuches += 1
+                            conversations_complete += 1
+
+            data = {
+                'total_fruit': total_fruit,
+                'average_fruit': round(total_fruit/conversations_complete, 2),
+                'conver_complete': conversations_complete,
+                'total_conver': len(user['conversations']),
+                'total_chuches': total_chuches,
+                'average_chuches': round(total_chuches/conversations_complete, 2),
+                'total_water': total_water,
+                'average_water': round(total_water/conversations_complete, 2)
+            }
+
+            data_array.append(data)
+
+    response = {
+        'info': data_array,
+        'users': users
     }
 
     return jsonify(response)
