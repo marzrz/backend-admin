@@ -462,9 +462,11 @@ def get_points(id_user):
     return jsonify(response)
 
 
-@app.route('/users/<id_user>/fruit', methods=['GET'])
-def get_fruit(id_user):
+@app.route('/users/<id_user>/info', methods=['GET'])
+def get_info(id_user):
     total_fruit = 0
+    total_chuches = 0
+    total_water = 0
     conversations_complete = 0
     user = json_util.loads(func_get_user(id_user))
     for conver in user['conversations']:
@@ -473,17 +475,27 @@ def get_fruit(id_user):
         if conversation['messages'][-1]['user'] == "bot":
             if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
                 total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
+                total_water += conversation['messages'][-1]['parameters']['vecesAgua']
+                if conversation['messages'][-1]['parameters']['chuches'] != "No":
+                    total_chuches += 1
                 conversations_complete += 1
         else:
             if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
                 total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
+                total_water += conversation['messages'][-2]['parameters']['vecesAgua']
+                if conversation['messages'][-2]['parameters']['chuches'] != "No":
+                    total_chuches += 1
                 conversations_complete += 1
 
     response = {
-        'total': total_fruit,
-        'average': round(total_fruit/conversations_complete, 2),
+        'total_fruit': total_fruit,
+        'average_fruit': round(total_fruit/conversations_complete, 2),
         'conver_complete': conversations_complete,
-        'total_conver': len(user['conversations'])
+        'total_conver': len(user['conversations']),
+        'total_chuches': total_chuches,
+        'average_chuches': round(total_chuches/conversations_complete, 2),
+        'total_water': total_water,
+        'average_water': round(total_water/conversations_complete, 2)
     }
 
     return jsonify(response)
