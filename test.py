@@ -28,7 +28,9 @@ def get_users():
         user = json_util.loads(json_util.dumps(doc))
         user = {
             'id_user': str(user['_id']),
-            'username': user['username']
+            'username': user['username'],
+            'initialized': user['initialized'],
+            'grupo_investigacion': user['grupo_investigacion']
         }
         user_list.append(user)
 
