@@ -95,7 +95,11 @@ def get_kidmed_all():
                 'points': user['total_kidmed']
             }
             tests.append(kidmed)
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
@@ -134,7 +138,11 @@ def get_demtest_all():
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
             tests.append(user['dem_test'])
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
@@ -160,7 +168,11 @@ def get_paqc_all():
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
             tests.append(user['paqc'])
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
@@ -186,7 +198,11 @@ def get_pedsql_all():
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
             tests.append(user['pedsql'])
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
@@ -212,7 +228,11 @@ def get_initialtest_all():
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
             tests.append(user['initial_test'])
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
@@ -311,7 +331,11 @@ def get_game_all(id_game):
             game3_2 = user['game3_part2']
             game4 = user['game4']
 
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
             if id_game == "1":
                 if user['game1_part2_complete']:
@@ -394,7 +418,11 @@ def get_survey_all():
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
             tests.append(user['survey'])
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
@@ -451,11 +479,19 @@ def get_all_pretests(index_test):
                 pretest = json_util.loads(json_util.dumps(pretest_document))
                 tests.append(pretest['questions'])
                 points.append(pretest['totalPoints'])
-                users.append(user['username'])
+                userData = {
+                    'username': user['username'],
+                    'grupo_investigacion': user['grupo_investigacion']
+                }
+                users.append(userData)
             else:
                 tests.append([])
                 points.append(None)
-                users.append(user['username'])
+                userData = {
+                    'username': user['username'],
+                    'grupo_investigacion': user['grupo_investigacion']
+                }
+                users.append(userData)
 
     response = {
         'tests': tests,
@@ -505,7 +541,11 @@ def get_points_all():
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
             pretest_list = user['pretests']
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
             for i in range(3):
                 if i <= len(pretest_list)-1:
@@ -585,7 +625,11 @@ def get_info_all():
         conversations_complete = 0
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
             for conver in user['conversations']:
                 conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
                 conversation = json_util.loads(json_util.dumps(conversation_document))

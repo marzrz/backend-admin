@@ -96,7 +96,11 @@ def get_kidmed_all():
         user = json_util.loads(json_util.dumps(doc))
         if (user['initialized']):
             tests.append(user['kidmed'])
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
@@ -123,7 +127,11 @@ def get_demtest_all():
         user = json_util.loads(json_util.dumps(doc))
         if (user['initialized']):
             tests.append(user['dem_test'])
-            users.append(user['username'])
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion']
+            }
+            users.append(userData)
 
     response = {
         'tests': tests,
