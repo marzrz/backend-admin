@@ -649,16 +649,28 @@ def get_info_all():
                                 total_chuches += 1
                             conversations_complete += 1
 
-            data = {
+            if (conversations_complete != 0):
+                data = {
                 'total_fruit': total_fruit,
-                'average_fruit': round(total_fruit/conversations_complete, 2),
+                'average_fruit': round(total_fruit / conversations_complete, 2),
                 'conver_complete': conversations_complete,
                 'total_conver': len(user['conversations']),
                 'total_chuches': total_chuches,
-                'average_chuches': round(total_chuches/conversations_complete, 2),
+                'average_chuches': round(total_chuches / conversations_complete, 2),
                 'total_water': total_water,
-                'average_water': round(total_water/conversations_complete, 2)
-            }
+                'average_water': round(total_water / conversations_complete, 2)
+                }
+            else:
+                data = {
+                    'total_fruit': total_fruit,
+                    'average_fruit': 0,
+                    'conver_complete': conversations_complete,
+                    'total_conver': len(user['conversations']),
+                    'total_chuches': total_chuches,
+                    'average_chuches': 0,
+                    'total_water': total_water,
+                    'average_water': 0
+                }
 
             data_array.append(data)
 
