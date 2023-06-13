@@ -22,6 +22,42 @@ def func_get_user(id):
 
 
 # USER
+@app.route('/users/create', methods=['POST'])
+def create_user():
+    username = request.json['username']
+    grupoInvestigacion = request.json['grupo_investigacion']
+    centro = request.json['centro']
+    curso = request.json['curso']
+    grupo = request.json['grupo']
+
+    data = {
+        'username': username,
+        'password': username,
+        'initializated': False,
+        'grupo_investigacion': grupoInvestigacion,
+        'centro': centro,
+        'curso': curso,
+        'grupo': grupo
+    }
+
+    result = mongo.db.user.insert_one(data)
+    idUser = result.inserted_id
+
+    filter = {'_id': ObjectId(idUser)}
+    userDocument = mongo.db.user.find_one(filter)
+
+    if (userDocument):
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'error'
+        }
+
+    return response
+
+
 @app.route('/users', methods=['GET'])
 def get_users():
     user_list = []
