@@ -55,7 +55,7 @@ def create_user():
             'status': 'error'
         }
 
-    return response
+    return jsonify(response)
 
 @app.route('/users/<username>/exists', methods=['GET'])
 def user_exists(username):
@@ -71,7 +71,7 @@ def user_exists(username):
             'exists': False
         }
 
-    return response
+    return jsonify(response)
 
 @app.route('/users/<username>/delete', methods=['DELETE'])
 def delete_user(username):
@@ -92,7 +92,7 @@ def delete_user(username):
             'status': 'success'
         }
 
-    return response
+    return jsonify(response)
 
 @app.route('/users', methods=['GET'])
 def get_users():
@@ -110,6 +110,31 @@ def get_users():
 
     response = {
         'users': user_list
+    }
+
+    return jsonify(response)
+
+@app.route('/users/<username>/edit', methods=['POST'])
+def edit_user(username):
+    data = request.json
+    filter = {
+        'username': username.upper()
+    }
+    
+    mongo.db.user.update_one(filter, { '$set': data })
+
+
+@app.route('/users/<username>/user', methods=['GET'])
+def get_user_by_username(username):
+    user_document = mongo.db.user.find_one({"username": username})
+    user = json_util.loads(json_util.dumps(user_document))
+
+    response = {
+        'username': user['username'],
+        'grupo_investigacion': user['grupo_investigacion'],
+        'centro': user['centro'],
+        'curso': user['curso'],
+        'grupo': user['grupo']
     }
 
     return jsonify(response)
