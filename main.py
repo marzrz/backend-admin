@@ -33,7 +33,7 @@ def create_user():
     data = {
         'username': username,
         'password': username,
-        'initializated': False,
+        'initialized': False,
         'grupo_investigacion': grupoInvestigacion,
         'centro': centro,
         'curso': curso,
