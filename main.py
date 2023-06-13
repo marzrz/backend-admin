@@ -62,7 +62,7 @@ def user_exists(username):
     filter = { 'username': username.upper() }
     userDocument = mongo.db.user.find_one(filter)
 
-    if (userDocument):
+    if userDocument:
         response = {
             'exists': True
         }
@@ -73,10 +73,26 @@ def user_exists(username):
 
     return response
 
-# @app.route('/users/<id_user>/delete', methods=['GET'])
-# def delete_user(id_user):
-#
-#     return
+@app.route('/users/<username>/delete', methods=['DELETE'])
+def delete_user(username):
+    filter = {
+        'username': username.upper()
+    }
+
+    mongo.db.user.delete_one(filter)
+
+    userDocument = mongo.db.user.find_one(filter)
+
+    if userDocument:
+        response = {
+            'status': 'error'
+        }
+    else:
+        response = {
+            'status': 'success'
+        }
+
+    return response
 
 @app.route('/users', methods=['GET'])
 def get_users():
