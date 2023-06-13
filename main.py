@@ -31,8 +31,8 @@ def create_user():
     grupo = request.json['grupo']
 
     data = {
-        'username': username,
-        'password': username,
+        'username': username.upper(),
+        'password': username.upper(),
         'initialized': False,
         'grupo_investigacion': grupoInvestigacion,
         'centro': centro,
