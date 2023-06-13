@@ -57,6 +57,26 @@ def create_user():
 
     return response
 
+@app.route('/users/<username>/exists', methods=['GET'])
+def user_exists(username):
+    filter = { 'username': username.upper() }
+    userDocument = mongo.db.user.find_one(filter)
+
+    if (userDocument):
+        response = {
+            'exists': True
+        }
+    else:
+        response = {
+            'exists': False
+        }
+
+    return response
+
+# @app.route('/users/<id_user>/delete', methods=['GET'])
+# def delete_user(id_user):
+#
+#     return
 
 @app.route('/users', methods=['GET'])
 def get_users():
