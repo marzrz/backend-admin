@@ -120,22 +120,35 @@ def edit_user(username):
     filter = {
         'username': username.upper()
     }
-    
+
     mongo.db.user.update_one(filter, { '$set': data })
+
+    response = {
+        'status': 'success'
+    }
+
+    return jsonify(response)
 
 
 @app.route('/users/<username>/user', methods=['GET'])
 def get_user_by_username(username):
     user_document = mongo.db.user.find_one({"username": username})
-    user = json_util.loads(json_util.dumps(user_document))
 
-    response = {
+    if user_document:
+        user = json_util.loads(json_util.dumps(user_document))
+
+        response = {
         'username': user['username'],
         'grupo_investigacion': user['grupo_investigacion'],
         'centro': user['centro'],
         'curso': user['curso'],
         'grupo': user['grupo']
-    }
+        }
+    else:
+        response = {
+            'status': 'error'
+        }
+
 
     return jsonify(response)
 
