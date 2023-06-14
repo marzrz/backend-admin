@@ -845,6 +845,42 @@ def login():
 
     return jsonify(data)
 
+# CONFIG
+@app.route('/config/phase1', methods=['GET'])
+def get_phase1():
+    configDocument = mongo.db.config.find_one({'_id': ObjectId('63f728e1b84fff80e32a1570')})
+
+    if (configDocument):
+        config = json_util.loads(json_util.dumps(configDocument))
+
+        response = {
+            'phase1': config['phase2Enabled']
+        }
+    else:
+        response = {
+            'status': 'error'
+        }
+
+    return jsonify(response)
+
+@app.route('/config/phase1', methods=['POST'])
+def update_phase1():
+    phase1 = request.json['phase1']
+    filter = {
+        '_id': ObjectId('63f728e1b84fff80e32a1570')
+    }
+    data = {
+        'phase2Enabled': phase1
+    }
+
+    mongo.db.config.update_one(filter, { '$set': data })
+
+    response = {
+        'status': 'success'
+    }
+
+    return jsonify(response)
+
 # EXPORT
 @app.route('/exports/xlsx', methods=['GET'])
 def export_xlsx():
