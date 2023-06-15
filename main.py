@@ -105,7 +105,8 @@ def get_users():
             'id_user': str(user['_id']),
             'username': user['username'],
             'initialized': user['initialized'],
-            'grupo_investigacion': user['grupo_investigacion']
+            'grupo_investigacion': user['grupo_investigacion'],
+            'activated': user['activated']
         }
         user_list.append(user)
 
