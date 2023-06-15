@@ -74,7 +74,7 @@ def user_exists(username):
 
     return jsonify(response)
 
-@app.route('/users/<username>/activation', methods=['DELETE'])
+@app.route('/users/<username>/activation', methods=['GET'])
 def activation_user(username):
     filter = {
         'username': username.upper()
@@ -83,8 +83,11 @@ def activation_user(username):
     userDocument = mongo.db.user.find_one(filter)
     user = json_util.loads(json_util.dumps(userDocument))
 
+    activated = user['activated']
+    newActivated = not activated
+
     newData = {
-        'activated': not user['activated']
+        'activated': newActivated
     }
 
     mongo.db.user.update_one(filter, { '$set': newData })
