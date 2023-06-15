@@ -37,7 +37,8 @@ def create_user():
         'grupo_investigacion': grupoInvestigacion,
         'centro': centro,
         'curso': curso,
-        'grupo': grupo
+        'grupo': grupo,
+        'activated': True
     }
 
     result = mongo.db.user.insert_one(data)
@@ -73,24 +74,24 @@ def user_exists(username):
 
     return jsonify(response)
 
-@app.route('/users/<username>/delete', methods=['DELETE'])
-def delete_user(username):
+@app.route('/users/<username>/activation', methods=['DELETE'])
+def activation_user(username):
     filter = {
         'username': username.upper()
     }
 
-    mongo.db.user.delete_one(filter)
-
     userDocument = mongo.db.user.find_one(filter)
+    user = json_util.loads(json_util.dumps(userDocument))
 
-    if userDocument:
-        response = {
-            'status': 'error'
-        }
-    else:
-        response = {
-            'status': 'success'
-        }
+    newData = {
+        'activated': not user['activated']
+    }
+
+    mongo.db.user.update_one(filter, { '$set': newData })
+
+    response = {
+        'status': 'success'
+    }
 
     return jsonify(response)
 
