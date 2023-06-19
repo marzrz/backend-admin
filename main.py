@@ -81,20 +81,25 @@ def activation_user(username):
     }
 
     userDocument = mongo.db.user.find_one(filter)
-    user = json_util.loads(json_util.dumps(userDocument))
+    if (userDocument):
+        user = json_util.loads(json_util.dumps(userDocument))
 
-    activated = user['activated']
-    newActivated = not activated
+        activated = user['activated']
+        newActivated = not activated
 
-    newData = {
-        'activated': newActivated
-    }
+        newData = {
+            'activated': newActivated
+        }
 
-    mongo.db.user.update_one(filter, { '$set': newData })
+        mongo.db.user.update_one(filter, { '$set': newData })
 
-    response = {
-        'status': 'success'
-    }
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'error'
+        }
 
     return jsonify(response)
 
