@@ -109,15 +109,14 @@ def get_users():
     user_documents = mongo.db.user.find()
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if  (user['activated']):
-            user = {
-                'id_user': str(user['_id']),
-                'username': user['username'],
-                'initialized': user['initialized'],
-                'grupo_investigacion': user['grupo_investigacion'],
-                'activated': user['activated']
-            }
-            user_list.append(user)
+        user = {
+            'id_user': str(user['_id']),
+            'username': user['username'],
+            'initialized': user['initialized'],
+            'grupo_investigacion': user['grupo_investigacion'],
+            'activated': user['activated']
+        }
+        user_list.append(user)
 
     response = {
         'users': user_list
