@@ -217,7 +217,8 @@ def get_kidmed_all():
             tests.append(kidmed)
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -260,7 +261,8 @@ def get_demtest_all():
             tests.append(user['dem_test'])
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -290,7 +292,8 @@ def get_paqc_all():
             tests.append(user['paqc'])
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -320,7 +323,8 @@ def get_pedsql_all():
             tests.append(user['pedsql'])
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -350,7 +354,8 @@ def get_initialtest_all():
             tests.append(user['initial_test'])
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -453,7 +458,8 @@ def get_game_all(id_game):
 
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -540,7 +546,8 @@ def get_survey_all():
             tests.append(user['survey'])
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -601,7 +608,8 @@ def get_all_pretests(index_test):
                 points.append(pretest['totalPoints'])
                 userData = {
                     'username': user['username'],
-                    'grupo_investigacion': user['grupo_investigacion']
+                    'grupo_investigacion': user['grupo_investigacion'],
+                    'activated': user['activated']
                 }
                 users.append(userData)
             else:
@@ -609,7 +617,8 @@ def get_all_pretests(index_test):
                 points.append(None)
                 userData = {
                     'username': user['username'],
-                    'grupo_investigacion': user['grupo_investigacion']
+                    'grupo_investigacion': user['grupo_investigacion'],
+                    'activated': user['activated']
                 }
                 users.append(userData)
 
@@ -663,7 +672,8 @@ def get_points_all():
             pretest_list = user['pretests']
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
 
@@ -747,7 +757,8 @@ def get_info_all():
         if user['initialized']:
             userData = {
                 'username': user['username'],
-                'grupo_investigacion': user['grupo_investigacion']
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
             }
             users.append(userData)
             for conver in user['conversations']:
