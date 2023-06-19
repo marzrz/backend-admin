@@ -20,12 +20,12 @@ def demtest():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     demtest = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             demtest[index] = []
             user_list.append(user['username'])
             if user['dem_test_complete']:
@@ -55,15 +55,15 @@ def kidmed():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     kidmed = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             kidmed[index] = []
             user_list.append(user['username'])
-            if user['initialized'] and user['kidmed_complete']:
+            if user['initialized'] and user['activated'] and user['kidmed_complete']:
                 kidmed_json = json_util.loads(json_util.dumps(user['kidmed']))
                 kidmed[index].append(user['total_kidmed'])
                 if not columns_complete:
@@ -93,12 +93,12 @@ def paqc():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     paqc = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             paqc[index] = []
             user_list.append(user['username'])
             if user['paqc_complete']:
@@ -145,12 +145,12 @@ def pedsql():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     pedsql = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             pedsql[index] = []
             user_list.append(user['username'])
             if user['pedsql_complete']:
@@ -198,12 +198,12 @@ def initialtest():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     initialtest = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             initialtest[index] = []
             user_list.append(user['username'])
             if user['initial_test_complete']:
@@ -233,12 +233,12 @@ def game1():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     game1 = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             game1[index] = []
             user_list.append(user['username'])
             if user['game1_part2_complete']:
@@ -291,15 +291,15 @@ def game2():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     game2 = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             game2[index] = []
             user_list.append(user['username'])
-            if user['initialized'] and user['game2_complete']:
+            if user['initialized'] and user['activated'] and user['game2_complete']:
                 game2_json = json_util.loads(json_util.dumps(user['game2']))
                 if not columns_complete:
                     columns.append('g2_points')
@@ -333,15 +333,15 @@ def game3():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     game3 = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             game3[index] = []
             user_list.append(user['username'])
-            if user['initialized'] and user['game3_part2_complete']:
+            if user['initialized'] and user['activated'] and user['game3_part2_complete']:
                 game3_json = json_util.loads(json_util.dumps(user['game3']))
                 if not columns_complete:
                     columns.append('g3p1_points')
@@ -387,12 +387,12 @@ def game4():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     game4 = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             game4[index] = []
             user_list.append(user['username'])
             if user['game4_complete']:
@@ -427,12 +427,12 @@ def survey():
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     survey = [[None] * n_variables] * n_initialized
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             survey[index] = []
             user_list.append(user['username'])
             if user['survey_complete']:
@@ -471,7 +471,7 @@ def pretests(number):
     user_documents = list(mongo.db.user.find())
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             n_initialized += 1
     pretest = [[None] * n_variables] * n_initialized
     # for doc in user_documents:
@@ -479,10 +479,10 @@ def pretests(number):
     #     user_list.append(user['username'])
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
-        if user['initialized']:
+        if user['initialized'] and user['activated']:
             pretest[index] = []
             user_list.append(user['username'])
-            if user['initialized'] and user['pretest_complete'] >= number:
+            if user['initialized'] and user['activated'] and user['pretest_complete'] >= number:
                 pretest_list = json_util.loads(json_util.dumps(user['pretests']))
                 pretest_document = mongo.db.pretest.find_one({'_id': pretest_list[number-1]})
                 pretest_json = json_util.loads(json_util.dumps(pretest_document))
