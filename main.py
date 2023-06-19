@@ -77,7 +77,7 @@ def user_exists(username):
 @app.route('/users/<username>/activation', methods=['GET'])
 def activation_user(username):
     filter = {
-        'username': username.upper()
+        'username': username
     }
 
     userDocument = mongo.db.user.find_one(filter)

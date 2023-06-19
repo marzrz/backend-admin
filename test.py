@@ -117,6 +117,35 @@ def get_demtest(id_user):
 
     return demtest
 
+@app.route('/users/<username>/activation', methods=['GET'])
+def activation_user(username):
+    filter = {
+        'username': username
+    }
+
+    userDocument = mongo.db.user.find_one(filter)
+    if (userDocument):
+        user = json_util.loads(json_util.dumps(userDocument))
+
+        activated = user['activated']
+        newActivated = not activated
+
+        newData = {
+            'activated': newActivated
+        }
+
+        mongo.db.user.update_one(filter, { '$set': newData })
+
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'error'
+        }
+
+    return jsonify(response)
+
 
 @app.route('/users/demtest', methods=['GET'])
 def get_demtest_all():
