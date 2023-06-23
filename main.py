@@ -181,7 +181,7 @@ def get_user(id_user):
 def get_conversations(id_user):
     conversation_list = []
     user = json_util.loads(func_get_user(id_user))
-    if user['initialized']:
+    if user['initialized'] and user['grupo_investigacion'] == 'intervencion':
         conversations = user['conversations']
         for conver in conversations:
             conversation_document = mongo.db.conversation.find_one({"_id": conver})
@@ -192,6 +192,29 @@ def get_conversations(id_user):
                     'session': conversation['session'],
                     'n_messages': len(conversation['messages']),
                     'date': conversation['messages'][0]['date']
+                }
+                conversation_list.append(conver_item)
+
+    response = {
+        'conversations': conversation_list
+    }
+
+    return jsonify(response)
+
+@app.route('/users/<id_user>/conversations/control', methods=['GET'])
+def get_conversations_control(id_user):
+    conversation_list = []
+    user = json_util.loads(func_get_user(id_user))
+    if user['initialized'] and user['grupo_investigacion'] == 'control':
+        conversations = user['conversations']
+        for conver in conversations:
+            conversation_document = mongo.db.conversation.find_one({"_id": conver})
+            if conversation_document:
+                conversation = json_util.loads(json_util.dumps(conversation_document))
+                conver_item = {
+                    'id_conver': str(conver),
+                    'date': conversation['date'],
+                    'conversation': conversation['conversation']
                 }
                 conversation_list.append(conver_item)
 
