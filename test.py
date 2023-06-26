@@ -529,34 +529,59 @@ def get_info(id_user):
     total_water = 0
     conversations_complete = 0
     user = json_util.loads(func_get_user(id_user))
-    for conver in user['conversations']:
-        conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
-        conversation = json_util.loads(json_util.dumps(conversation_document))
-        if conversation['messages'][-1]['user'] == "bot":
-            if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
-                total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
-                total_water += conversation['messages'][-1]['parameters']['vecesAgua']
-                if conversation['messages'][-1]['parameters']['chuches'] != "No":
-                    total_chuches += 1
-                conversations_complete += 1
-        else:
-            if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
-                total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
-                total_water += conversation['messages'][-2]['parameters']['vecesAgua']
-                if conversation['messages'][-2]['parameters']['chuches'] != "No":
-                    total_chuches += 1
-                conversations_complete += 1
+    if (user['grupo_investigacion'] == 'intervencion'):
+        for conver in user['conversations']:
+            conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
+            conversation = json_util.loads(json_util.dumps(conversation_document))
+            if conversation['messages'][-1]['user'] == "bot":
+                if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
+                    total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
+                    total_water += conversation['messages'][-1]['parameters']['vecesAgua']
+                    if conversation['messages'][-1]['parameters']['chuches'] != "No":
+                        total_chuches += 1
+                    conversations_complete += 1
+            else:
+                if conversation['messages'][-2]['user'] == "bot":
+                    if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
+                        total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
+                        total_water += conversation['messages'][-2]['parameters']['vecesAgua']
+                        if conversation['messages'][-2]['parameters']['chuches'] != "No":
+                            total_chuches += 1
+                        conversations_complete += 1
 
-    response = {
-        'total_fruit': total_fruit,
-        'average_fruit': round(total_fruit/conversations_complete, 2),
-        'conver_complete': conversations_complete,
-        'total_conver': len(user['conversations']),
-        'total_chuches': total_chuches,
-        'average_chuches': round(total_chuches/conversations_complete, 2),
-        'total_water': total_water,
-        'average_water': round(total_water/conversations_complete, 2)
-    }
+        if (conversations_complete != 0):
+            response = {
+                'total_fruit': total_fruit,
+                'average_fruit': round(total_fruit/conversations_complete, 2),
+                'conver_complete': conversations_complete,
+                'total_conver': len(user['conversations']),
+                'total_chuches': total_chuches,
+                'average_chuches': round(total_chuches/conversations_complete, 2),
+                'total_water': total_water,
+                'average_water': round(total_water/conversations_complete, 2)
+            }
+        else:
+            response = {
+                'total_fruit': total_fruit,
+                'average_fruit': 0,
+                'conver_complete': conversations_complete,
+                'total_conver': len(user['conversations']),
+                'total_chuches': total_chuches,
+                'average_chuches': 0,
+                'total_water': total_water,
+                'average_water': 0
+            }
+    else:
+        response = {
+            'total_fruit': None,
+            'average_fruit': None,
+            'conver_complete': conversations_complete,
+            'total_conver': len(user['conversations']),
+            'total_chuches': None,
+            'average_chuches': None,
+            'total_water': None,
+            'average_water': None
+        }
 
     return jsonify(response)
 
@@ -573,36 +598,65 @@ def get_info_all():
         conversations_complete = 0
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
-            users.append(user['username'])
-            for conver in user['conversations']:
-                conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
-                conversation = json_util.loads(json_util.dumps(conversation_document))
-                if conversation['messages'][-1]['user'] == "bot":
-                    if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
-                        total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
-                        total_water += conversation['messages'][-1]['parameters']['vecesAgua']
-                        if conversation['messages'][-1]['parameters']['chuches'] != "No":
-                            total_chuches += 1
-                        conversations_complete += 1
-                else:
-                    if conversation['messages'][-2]['user'] == "bot":
-                        if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
-                            total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
-                            total_water += conversation['messages'][-2]['parameters']['vecesAgua']
-                            if conversation['messages'][-2]['parameters']['chuches'] != "No":
+            userData = {
+                'username': user['username'],
+                'grupo_investigacion': user['grupo_investigacion'],
+                'activated': user['activated']
+            }
+            users.append(userData)
+            if (user['grupo_investigacion'] == 'intervencion'):
+                for conver in user['conversations']:
+                    conversation_document = mongo.db.conversation.find_one({"_id": ObjectId(conver)})
+                    conversation = json_util.loads(json_util.dumps(conversation_document))
+                    if conversation['messages'][-1]['user'] == "bot":
+                        if conversation['messages'][-1]['parameters']['numeroPregunta'] == conversation['messages'][-1]['parameters']['totalPreguntas']:
+                            total_fruit += conversation['messages'][-1]['parameters']['piezasFruta']
+                            total_water += conversation['messages'][-1]['parameters']['vecesAgua']
+                            if conversation['messages'][-1]['parameters']['chuches'] != "No":
                                 total_chuches += 1
                             conversations_complete += 1
+                    else:
+                        if conversation['messages'][-2]['user'] == "bot":
+                            if conversation['messages'][-2]['parameters']['numeroPregunta'] == conversation['messages'][-2]['parameters']['totalPreguntas']:
+                                total_fruit += conversation['messages'][-2]['parameters']['piezasFruta']
+                                total_water += conversation['messages'][-2]['parameters']['vecesAgua']
+                                if conversation['messages'][-2]['parameters']['chuches'] != "No":
+                                    total_chuches += 1
+                                conversations_complete += 1
 
-            data = {
-                'total_fruit': total_fruit,
-                'average_fruit': round(total_fruit/conversations_complete, 2),
-                'conver_complete': conversations_complete,
-                'total_conver': len(user['conversations']),
-                'total_chuches': total_chuches,
-                'average_chuches': round(total_chuches/conversations_complete, 2),
-                'total_water': total_water,
-                'average_water': round(total_water/conversations_complete, 2)
-            }
+                if (conversations_complete != 0):
+                    data = {
+                    'total_fruit': total_fruit,
+                    'average_fruit': round(total_fruit / conversations_complete, 2),
+                    'conver_complete': conversations_complete,
+                    'total_conver': len(user['conversations']),
+                    'total_chuches': total_chuches,
+                    'average_chuches': round(total_chuches / conversations_complete, 2),
+                    'total_water': total_water,
+                    'average_water': round(total_water / conversations_complete, 2)
+                    }
+                else:
+                    data = {
+                        'total_fruit': total_fruit,
+                        'average_fruit': 0,
+                        'conver_complete': conversations_complete,
+                        'total_conver': len(user['conversations']),
+                        'total_chuches': total_chuches,
+                        'average_chuches': 0,
+                        'total_water': total_water,
+                        'average_water': 0
+                    }
+            else:
+                data = {
+                    'total_fruit': None,
+                    'average_fruit': None,
+                    'conver_complete': conversations_complete,
+                    'total_conver': len(user['conversations']),
+                    'total_chuches': None,
+                    'average_chuches': None,
+                    'total_water': None,
+                    'average_water': None
+                }
 
             data_array.append(data)
 
