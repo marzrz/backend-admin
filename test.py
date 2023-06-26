@@ -117,6 +117,30 @@ def get_demtest(id_user):
 
     return demtest
 
+@app.route('/users/<id_user>/conversations/control', methods=['GET'])
+def get_conversations_control(id_user):
+    conversation_list = []
+    user = json_util.loads(func_get_user(id_user))
+    if user['initialized']:
+        conversations = user['conversations']
+        print(conversations)
+        for conver in conversations:
+            conversation_document = mongo.db.conversation.find_one({"_id": conver})
+            if conversation_document:
+                conversation = json_util.loads(json_util.dumps(conversation_document))
+                conver_item = {
+                    'id_conver': str(conver),
+                    'date': conversation['date'],
+                    'conversation': conversation['conversation']
+                }
+                conversation_list.append(conver_item)
+
+    response = {
+        'conversations': conversation_list
+    }
+
+    return jsonify(response)
+
 @app.route('/users/<username>/activation', methods=['GET'])
 def activation_user(username):
     filter = {
@@ -270,16 +294,10 @@ def get_game_all(id_game):
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
-            if user['game1_part2_complete']:
-                game1_1 = user['game1']
-            else:
-                game1_1 = user['game1_part1']
+            game1_1 = user['game1']
             game1_2 = user['game1_part2']
             game2 = user['game2']
-            if user['game3_part2_complete']:
-                game3_1 = user['game3']
-            else:
-                game3_1 = user['game3_part1']
+            game3_1 = user['game3']
             game3_2 = user['game3_part2']
             game4 = user['game4']
 

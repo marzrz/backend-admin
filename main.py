@@ -466,16 +466,10 @@ def get_game_all(id_game):
     for doc in user_documents:
         user = json_util.loads(json_util.dumps(doc))
         if user['initialized']:
-            if user['game1_part2_complete']:
-                game1_1 = user['game1']
-            else:
-                game1_1 = user['game1_part1']
+            game1_1 = user['game1']
             game1_2 = user['game1_part2']
             game2 = user['game2']
-            if user['game3_part2_complete']:
-                game3_1 = user['game3']
-            else:
-                game3_1 = user['game3_part1']
+            game3_1 = user['game3']
             game3_2 = user['game3_part2']
             game4 = user['game4']
 
